@@ -1,11 +1,8 @@
-import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from utils.cube import plotCubeAt, cuboid_data
+import numpy as np
+from utils.cube import plotCubeAt
 from utils.line import line_vector
 from utils.line import rotation as rotation_line
-from utils.rotate_3d import Rotate
 
 
 def generate_spindle_torus(r, R, theta, phi, n=20):
@@ -20,8 +17,7 @@ def generate_spindle_torus(r, R, theta, phi, n=20):
 
 
 def rotate_torus(torus, rotates=(0, 0, 0)):
-
-    t = np.transpose(np.array([torus[0], torus[1], torus[2]]), (1,2,0))
+    t = np.transpose(np.array([torus[0], torus[1], torus[2]]), (1, 2, 0))
 
     m_x = np.array([[1, 0, 0],
                     [0, np.cos(rotates[0]), -np.sin(rotates[0])],
@@ -70,7 +66,6 @@ def rotation(point, rotates):
 
 
 def scale(point, scales):
-
     point = np.dot(point, np.array([[scales[0], 0, 0], [0, scales[1], 0], [0, 0, scales[2]]]))
 
     return point
@@ -87,8 +82,8 @@ def generate_event(r, R, rotates, scales, size=(0.5, 0.5, 0.5)):
 
     cross_point_1 = rotation(cross_point_1, rotates)
     cross_point_2 = rotation(cross_point_2, rotates)
-    #cross_point_1 = scale(cross_point_1, scales)
-    #cross_point_2 = scale(cross_point_2, scales)
+    # cross_point_1 = scale(cross_point_1, scales)
+    # cross_point_2 = scale(cross_point_2, scales)
 
     # rotation
     # cross_point_1 = rotation(cross_point_1, rotates)
@@ -103,7 +98,7 @@ def generate_event(r, R, rotates, scales, size=(0.5, 0.5, 0.5)):
     return event_1, event_2
 
 
-def plt_torus(torus, event_1=None, event_2=None, points=None, cameras=None, lim=3):
+def plt_torus(torus, event_1=None, event_2=None, points=None, cameras=None, focus=None, lim=3):
     fig = plt.figure(figsize=(8, 8))
     ax1 = fig.add_subplot(111, projection='3d')
     ax1.set_xlabel('x')
@@ -112,7 +107,7 @@ def plt_torus(torus, event_1=None, event_2=None, points=None, cameras=None, lim=
     ax1.set_xlim([-lim, lim])
     ax1.set_ylim([-lim, lim])
     ax1.set_zlim([-lim, lim])
-    ax1.plot_surface(torus[0], torus[1], torus[2], linewidth=0, antialiased=False, shade=True, alpha=0.5)
+    # ax1.plot_surface(torus[0], torus[1], torus[2], linewidth=0, antialiased=False, shade=True, alpha=0.5)
     if event_1 and event_2:
         pc = plotCubeAt([event_1['position'], event_2['position']],
                         sizes=[event_1['size'], event_2['size']],
@@ -123,24 +118,24 @@ def plt_torus(torus, event_1=None, event_2=None, points=None, cameras=None, lim=
         for point in points:
             ax1.scatter(point[0], point[1], point[2], marker='o', c='r', s=20)
 
+    if focus:
+        for point in focus:
+            ax1.scatter(point[0], point[1], point[2], marker='o', c='g', s=20)
+
     points = np.array(points)
 
     ax1.plot(points[:, 0], points[:, 1], points[:, 2], '.r-', linewidth=2)
 
     if cameras:
         for i, camera in enumerate(cameras):
-
-            camera_shooting = np.array([points[i], camera * 5])
+            camera_shooting = np.array([points[i], camera])
 
             ax1.plot(camera_shooting[:, 0], camera_shooting[:, 1], camera_shooting[:, 2], '.y:', linewidth=2)
-
-
 
     plt.show()
 
 
 def calculate_point_projection(R, r, thetas, phis, sample=10, scales=None, rotates=None):
-
     thetas = np.linspace(thetas[0], thetas[1], sample)
     phis = np.linspace(phis[0], phis[1], sample)
 
@@ -160,31 +155,41 @@ def calculate_point_projection(R, r, thetas, phis, sample=10, scales=None, rotat
     return points
 
 
-def camera_line_simulation(e1_pos_env, e2_pos_env, e1_pos_unit, e2_pos_unit, camera_poss, theta_start=-120, theta_end=120):
+def camera_line_simulation(e1_pos_env, e2_pos_env, e1_pos_unit, e2_pos_unit, camera_poss, theta_start=-120,
+                           theta_end=120):
     # calculate the rotation any scale use to rotation unit event line to env event line
     eline_env, scale_env = line_vector(e1_pos_env, e2_pos_env)
     eline_unit, scale_unit = line_vector(e1_pos_unit, e2_pos_unit)
 
     rm_proj, scale_proj = rotation_line(eline_unit, eline_env, scale_env, scale_unit)
 
-    e_center_pos_unit = e2_pos_unit # [0, 0, 0]
+    focus_center_x = [e1_pos_unit[0] + (e2_pos_unit[0] - e1_pos_unit[0]) / 9 * i for i in range(10)]
+    focus_center_y = [e1_pos_unit[1] + (e2_pos_unit[1] - e1_pos_unit[1]) / 9 * i for i in range(10)]
+    focus_center_z = [e1_pos_unit[2] + (e2_pos_unit[2] - e1_pos_unit[2]) / 9 * i for i in range(10)]
+
+    focus = []
+    for i in range(10):
+        focus_center = [focus_center_x[i], focus_center_y[i], focus_center_z[i]]
+        focus.append(focus_center)
+
+    # e_center_pos_unit = e2_pos_unit[[]]
 
     angles = []
     direct_vectors = []
 
-    for camera_pos in camera_poss:
-        angle, direct_vector = camera_shot_angle(np.array(camera_pos), np.array(e_center_pos_unit))
+    for i, camera_pos in enumerate(camera_poss):
+        camera_focus = focus[i]
+        angle, direct_vector = camera_shot_angle(np.array(camera_pos), np.array(camera_focus))
         angles.append(angle)
         direct_vectors.append(direct_vector)
 
-    return direct_vectors, angles
+    return direct_vectors, angles, focus
 
 
 def camera_shot_angle(camera_pos, focus_pos):
-
     d_v, dist = line_vector(camera_pos, focus_pos)
     s = np.linalg.norm(d_v)
-    theta_1 = np.arccos(d_v[0]/s)
+    theta_1 = np.arccos(d_v[0] / s)
     theta_2 = np.arccos(d_v[1] / s)
     theta_3 = np.arccos(d_v[2] / s)
 
@@ -210,17 +215,18 @@ def main():
     torus = scale_torus(torus, scales=scales)
 
     event_1, event_2 = generate_event(r, R, rotates=rotates, scales=scales,
-                                      size=(0.2*scales[0], 0.2*scales[1], 0.2*scales[2]))
+                                      size=(0.2 * scales[0], 0.2 * scales[1], 0.2 * scales[2]))
 
     # projection
-    points = calculate_point_projection(R, r, projection_test_theta, projection_test_phi, rotates=rotates, scales=scales)
+    points = calculate_point_projection(R, r, projection_test_theta, projection_test_phi, rotates=rotates,
+                                        scales=scales)
 
-    direct_vectors, angles = camera_line_simulation(event_1['position'], event_2['position'],
+    direct_vectors, angles, focus = camera_line_simulation(event_1['position'], event_2['position'],
                                                     event_1['position'], event_2['position'],
                                                     points,
                                                     theta_start=-120, theta_end=120)
 
-    plt_torus(torus, event_1=event_1, event_2=event_2, points=points, cameras=direct_vectors)
+    plt_torus(torus, event_1=event_1, event_2=event_2, focus=focus, points=points, cameras=direct_vectors)
 
 
 if __name__ == "__main__":
