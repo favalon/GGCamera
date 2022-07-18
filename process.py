@@ -108,11 +108,11 @@ def plt_torus(torus, event_1=None, event_2=None, points=None, cameras=None, focu
     ax1.set_ylim([-lim, lim])
     ax1.set_zlim([-lim, lim])
     # ax1.plot_surface(torus[0], torus[1], torus[2], linewidth=0, antialiased=False, shade=True, alpha=0.5)
-    if event_1 and event_2:
-        pc = plotCubeAt([event_1['position'], event_2['position']],
-                        sizes=[event_1['size'], event_2['size']],
-                        colors=[event_1['color'], event_2['color']], edgecolor="k")
-        ax1.add_collection3d(pc)
+    # if event_1 and event_2:
+    #     pc = plotCubeAt([event_1['position'], event_2['position']],
+    #                     sizes=[event_1['size'], event_2['size']],
+    #                     colors=[event_1['color'], event_2['color']], edgecolor="k")
+    #     ax1.add_collection3d(pc)
 
     if points:
         for point in points:
@@ -128,7 +128,7 @@ def plt_torus(torus, event_1=None, event_2=None, points=None, cameras=None, focu
 
     if cameras:
         for i, camera in enumerate(cameras):
-            camera_shooting = np.array([points[i], camera])
+            camera_shooting = np.array([points[i], focus[i]])
 
             ax1.plot(camera_shooting[:, 0], camera_shooting[:, 1], camera_shooting[:, 2], '.y:', linewidth=2)
 
@@ -188,6 +188,7 @@ def camera_line_simulation(e1_pos_env, e2_pos_env, e1_pos_unit, e2_pos_unit, cam
 
 def camera_shot_angle(camera_pos, focus_pos):
     d_v, dist = line_vector(camera_pos, focus_pos)
+
     s = np.linalg.norm(d_v)
     theta_1 = np.arccos(d_v[0] / s)
     theta_2 = np.arccos(d_v[1] / s)
@@ -221,8 +222,8 @@ def main():
     points = calculate_point_projection(R, r, projection_test_theta, projection_test_phi, rotates=rotates,
                                         scales=scales)
 
-    direct_vectors, angles, focus = camera_line_simulation(event_1['position'], event_2['position'],
-                                                    event_1['position'], event_2['position'],
+    direct_vectors, angles, focus = camera_line_simulation(event_2['position'], event_1['position'],
+                                                    event_2['position'], event_1['position'],
                                                     points,
                                                     theta_start=-120, theta_end=120)
 
