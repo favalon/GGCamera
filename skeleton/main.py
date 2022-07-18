@@ -5,6 +5,8 @@ import pandas as pd
 import time
 from general.save_load import LoadBasic
 from utils.line import line_vector, rotation
+from process import generate_spindle_torus, generate_event, \
+    rotate_torus, scale_torus, calculate_point_projection, camera_line_simulation, plt_torus
 
 
 def rotation_matrix_from_vectors(vec1, vec2):
@@ -45,6 +47,8 @@ def move_direction(points, dist, moving_increment, start_point):
     # centroid_current
     z_offset = points.mean(axis=0)
 
+    z_offset[2] += 0.5
+
     for i in range(points.shape[0]):
         points[i] += start_point + dist * moving_increment - z_offset
     return points
@@ -66,8 +70,6 @@ class AnimatedScatter(object):
         self.target_uv, self.target_dist = line_vector(self.target_line[:, 0], self.target_line[:, 1])
         self.action_dist = 2
 
-        self.
-
         # Setup the figure and axes...
         self.fig = plt.figure(figsize=(8, 8))
         self.ax = self.fig.add_subplot(111, projection='3d')
@@ -79,6 +81,8 @@ class AnimatedScatter(object):
         x, y, z= next(self.stream).T
         # line = np.array([[0, 1], [0, 1], [0, 0]])
         self.scat = self.ax.scatter(x, y, z, c='y', s=20)
+
+        self.create_torus(all_scale=1)
 
         self.ax.scatter(self.centroid_end[0], self.centroid_end[1], self.centroid_end[2])
         self.ax.scatter(self.centroid_start[0], self.centroid_start[1], self.centroid_start[2])
@@ -148,6 +152,38 @@ class AnimatedScatter(object):
         # Note that it expects a sequence of artists, thus the trailing comma.
         # time.sleep(0.1)
         return self.scat,
+
+    def create_torus(self, all_scale=1):
+        # basic parameters
+        r = 1.2
+        R = 1
+
+        rotates = np.deg2rad((-90, 0, 0))
+        scales = (1 * all_scale, 1.5 * all_scale, 1 * all_scale)
+
+        projection_test_theta = np.deg2rad((-80, 120))
+        projection_test_phi = np.deg2rad((190, 190))
+
+        # generate the Spindle Torus
+        torus = generate_spindle_torus(r=r, R=R, theta=[0, 2], phi=[0, 2], n=20)
+
+        # torus transformation
+        torus = rotate_torus(torus, rotates=rotates)
+        torus = scale_torus(torus, scales=scales)
+
+        event_1, event_2 = generate_event(r, R, rotates=rotates, scales=scales,
+                                          size=(0.2 * scales[0], 0.2 * scales[1], 0.2 * scales[2]))
+
+        # projection
+        points = calculate_point_projection(R, r, projection_test_theta, projection_test_phi, rotates=rotates,
+                                            scales=scales)
+
+        direct_vectors, angles, focus = camera_line_simulation(event_2['position'], event_1['position'],
+                                                               event_2['position'], event_1['position'],
+                                                               points,
+                                                               theta_start=-120, theta_end=120)
+
+        plt_torus(self.ax, torus, event_1=event_1, event_2=event_2, focus=focus, points=points, cameras=direct_vectors)
 
 
 def get_moving_max(centroid_start, skeleton_sequence):

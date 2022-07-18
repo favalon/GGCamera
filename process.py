@@ -98,9 +98,12 @@ def generate_event(r, R, rotates, scales, size=(0.5, 0.5, 0.5)):
     return event_1, event_2
 
 
-def plt_torus(torus, event_1=None, event_2=None, points=None, cameras=None, focus=None, lim=3):
-    fig = plt.figure(figsize=(8, 8))
-    ax1 = fig.add_subplot(111, projection='3d')
+def plt_torus(ax, torus, event_1=None, event_2=None, points=None, cameras=None, focus=None, lim=3):
+    if ax:
+        ax1 = ax
+    else:
+        fig = plt.figure(figsize=(8, 8))
+        ax1 = fig.add_subplot(111, projection='3d')
     ax1.set_xlabel('x')
     ax1.set_ylabel('y')
     ax1.set_zlabel('z')
@@ -203,10 +206,10 @@ def main():
     R = 1
 
     rotates = np.deg2rad((0, 90, 0))
-    scales = (1.5, 0.7, 1)
+    scales = (1.5, 1, 1)
 
     projection_test_theta = np.deg2rad((-120, 120))
-    projection_test_phi = np.deg2rad((-100, -100))
+    projection_test_phi = np.deg2rad((-90, -90))
 
     # generate the Spindle Torus
     torus = generate_spindle_torus(r=r, R=R, theta=[0, 2], phi=[0, 2], n=20)
