@@ -1,9 +1,11 @@
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.spatial.transform import Rotation
+from camera.output_cameras import output_cameras_track
 import pandas as pd
-import time
-from general.save_load import LoadBasic
+import os
+from general.save_load import LoadBasic, SaveBasic
 from utils.line import line_vector, rotation
 from process import generate_spindle_torus, generate_event, \
     rotate_torus, scale_torus, calculate_point_projection, camera_line_simulation, plt_torus
@@ -28,12 +30,16 @@ def rotation_by_direction(base_line, target_line):
     uv2, dist2 = line_vector(target_line[:, 0], target_line[:, 1])
     rotation_matrix, scale = rotation(uv1, uv2, dist1, dist2)
 
-    return rotation_matrix, scale
+    target_line_center = (target_line[:, 1] + target_line[:, 0])/2
+    base_line_center = (np.array([0, 0, 0]))/2
+    center_dist = target_line_center - base_line_center
+
+    return rotation_matrix, scale, center_dist
 
 
-def rotate_direction(points, base_line, target_line):
+def rotate_direction(points, rotation_matrix):
 
-    rotation_matrix, scale = rotation_by_direction(base_line, target_line)
+    # rotation_matrix, scale = rotation_by_direction(base_line, target_line)
 
     for i in range(points.shape[0]):
         points[i][0:3] = np.dot(rotation_matrix, np.array([points[i][0], points[i][1], points[i][2]]))
@@ -54,6 +60,27 @@ def move_direction(points, dist, moving_increment, start_point):
     return points
 
 
+def combine_rotation(rotates, rotation_matrix=None):
+    # m_x = np.array([[1, 0, 0],
+    #                 [0, np.cos(rotates[0]), -np.sin(rotates[0])],
+    #                 [0, np.sin(rotates[0]), np.cos(rotates[0])]])
+    #
+    # m_y = np.array([[np.cos(rotates[1]), 0, np.sin(rotates[1])],
+    #                 [0, 1, 0],
+    #                 [-np.sin(rotates[1]), 0, np.cos(rotates[1])]])
+    #
+    # m_z = np.array([[np.cos(rotates[2]), -np.sin(rotates[2]), 0],
+    #                 [np.sin(rotates[2]), np.cos(rotates[2]), 0],
+    #                 [0, 0, 1]])
+    #
+    # if rotation_matrix is not None:
+    #
+    #     return np.dot(np.dot(np.dot(m_x, m_y), m_z), rotation_matrix)
+    # else:
+    #     return np.dot(np.dot(m_x, m_y), m_z)
+    return np.dot(rotation_matrix, rotates)
+
+
 class AnimatedScatter(object):
     """An animated scatter plot using matplotlib.animations.FuncAnimation."""
 
@@ -63,12 +90,15 @@ class AnimatedScatter(object):
         self.stream = self.data_stream()
 
         # for test roration
+        self.frames = 10
         self.centroid_end, self.centroid_start = decompose_action()
-        self.base_line = np.array([[0, 0], [0, 1], [0, 0]])
-        self.target_line = np.array([[0, 0], [-1, 1], [0, 0]])
-        # self.target_line = np.concatenate((np.reshape(self.centroid_start, (3, 1)), np.reshape(self.centroid_end, (3, 1))), axis=1)
+        self.base_line = np.array([[0, 0], [0, 1], [0, 0]], dtype=np.float32)
+        self.target_line = np.concatenate((np.reshape(self.centroid_start, (3, 1)),
+                                           np.reshape(self.centroid_end, (3, 1))), axis=1)
         self.target_uv, self.target_dist = line_vector(self.target_line[:, 0], self.target_line[:, 1])
-        self.action_dist = 2
+        self.action_dist = self.target_dist
+        self.rotation_matrix, self.target_dist, self.base2target_dist \
+            = rotation_by_direction(self.base_line, self.target_line)
 
         # Setup the figure and axes...
         self.fig = plt.figure(figsize=(8, 8))
@@ -78,16 +108,20 @@ class AnimatedScatter(object):
 
     def setup_plot(self, lim=5):
         """Initial drawing of the scatter plot."""
-        x, y, z= next(self.stream).T
+        x, y, z = next(self.stream).T
         # line = np.array([[0, 1], [0, 1], [0, 0]])
         self.scat = self.ax.scatter(x, y, z, c='y', s=20)
 
-        self.create_torus(all_scale=1)
+        self.create_torus()
 
-        self.ax.scatter(self.centroid_end[0], self.centroid_end[1], self.centroid_end[2])
-        self.ax.scatter(self.centroid_start[0], self.centroid_start[1], self.centroid_start[2])
+        # self.ax.scatter(self.centroid_end[0], self.centroid_end[1], self.centroid_end[2])
+        # self.ax.scatter(self.centroid_start[0], self.centroid_start[1], self.centroid_start[2])
         self.ax.plot(self.base_line[0, :], self.base_line[1, :], self.base_line[2, :], '.r-', linewidth=2)
-        self.ax.plot(self.target_line[0, :], self.target_line[1, :], self.target_line[2, :], '.g-', linewidth=2)
+        self.ax.plot(self.target_line[0, :], self.target_line[1, :], self.target_line[2, :], '.b-', linewidth=3)
+        # k_line = self.base_line.copy()
+        # k_line[:, 0] = np.dot(self.rotation_matrix, k_line[:, 0])
+        # k_line[:, 1] = np.dot(self.rotation_matrix, k_line[:, 1])
+        # self.ax.plot(k_line[0, :], k_line[1, :], k_line[2, :], '.r-', linewidth=2)
 
         self.ax.set_xlabel('x')
         self.ax.set_ylabel('y')
@@ -101,7 +135,7 @@ class AnimatedScatter(object):
 
     def data_stream(self):
         skeleton_sequence = LoadBasic.load_basic(fn=self.fn, path=self.path, file_type='json')
-
+        self.frames = len(skeleton_sequence)
         while True:
             for frame, skeleton in enumerate(skeleton_sequence):
                 all_skeleton_xyz = np.zeros((4, len(skeleton['Skeleton']), 3))
@@ -127,7 +161,7 @@ class AnimatedScatter(object):
                             all_skeleton_xyz[0, :, 1],
                             all_skeleton_xyz[0, :, 2]]
 
-                tmp = rotate_direction(tmp, self.base_line, self.target_line)
+                tmp = rotate_direction(tmp, self.rotation_matrix)
 
                 moving_increment = frame/len(skeleton_sequence) * self.action_dist
 
@@ -153,35 +187,48 @@ class AnimatedScatter(object):
         # time.sleep(0.1)
         return self.scat,
 
-    def create_torus(self, all_scale=1):
+    def create_torus(self):
         # basic parameters
-        r = 1.2
-        R = 1
+        surface_scale = 0.3
+        r = 1.5 * surface_scale
+        R = 1 * surface_scale
+        h = 2 * np.sqrt(np.square(r) - np.square(R))
+        all_scale = self.target_dist/h/2
 
-        rotates = np.deg2rad((-90, 0, 0))
-        scales = (1 * all_scale, 1.5 * all_scale, 1 * all_scale)
+        rotates = Rotation.from_rotvec([np.deg2rad(-90), np.deg2rad(0), np.deg2rad(0)]).as_matrix()
+        scales = (1 * all_scale, 2 * all_scale, 1 * all_scale)
 
-        projection_test_theta = np.deg2rad((-80, 120))
-        projection_test_phi = np.deg2rad((190, 190))
+        projection_test_theta = np.deg2rad((120, -120))
+        projection_test_phi = np.deg2rad((170, 170))
 
         # generate the Spindle Torus
         torus = generate_spindle_torus(r=r, R=R, theta=[0, 2], phi=[0, 2], n=20)
 
-        # torus transformation
-        torus = rotate_torus(torus, rotates=rotates)
-        torus = scale_torus(torus, scales=scales)
+        rt = Rotation.from_matrix(self.rotation_matrix)
+        rt_a = rt.as_euler('xyz', degrees=True)
+        print(rt_a)
 
-        event_1, event_2 = generate_event(r, R, rotates=rotates, scales=scales,
-                                          size=(0.2 * scales[0], 0.2 * scales[1], 0.2 * scales[2]))
+        # torus transformation
+        torus = scale_torus(torus, scales=scales)
+        # torus = rotate_torus(torus, rotates=rotates)
+        # torus = scale_torus(torus, scales=scales)
+
+        event_1, event_2 = generate_event(r, R, rotates=self.rotation_matrix,
+                                          dist_offset=self.base2target_dist, scales=scales)
 
         # projection
-        points = calculate_point_projection(R, r, projection_test_theta, projection_test_phi, rotates=rotates,
+        points = calculate_point_projection(R, r, projection_test_theta, projection_test_phi, sample=self.frames,
+                                            rotates=np.eye(3), dist_offset=self.base2target_dist,
                                             scales=scales)
 
         direct_vectors, angles, focus = camera_line_simulation(event_2['position'], event_1['position'],
                                                                event_2['position'], event_1['position'],
-                                                               points,
+                                                               points, sample=self.frames,
                                                                theta_start=-120, theta_end=120)
+
+        output = output_cameras_track(points, focus)
+
+        SaveBasic.save_json(data=output, path=os.path.join(self.path), fn="camera_test.json")
 
         plt_torus(self.ax, torus, event_1=event_1, event_2=event_2, focus=focus, points=points, cameras=direct_vectors)
 
