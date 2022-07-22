@@ -72,30 +72,33 @@ def plt_torus(ax, torus, event_1=None, event_2=None, points=None, cameras=None, 
     ax1.set_ylim([-lim, lim])
     ax1.set_zlim([-lim, lim])
     # ax1.plot_surface(torus[0], torus[1], torus[2], linewidth=0, antialiased=False, shade=True, alpha=0.2)
-    # if event_1 and event_2:
-    #     # pc = plotCubeAt([event_1['position'], event_2['position']],
-    #     #                 sizes=[event_1['size'], event_2['size']],
-    #     #                 colors=[event_1['color'], event_2['color']], edgecolor="k")
-    #     ax1.scatter(event_1['position'][0], event_1['position'][1], event_1['position'][2], marker='o', c='y', s=80)
-    #     ax1.scatter(event_2['position'][0], event_2['position'][1], event_2['position'][2], marker='o', c='b', s=80)
+    if event_1 and event_2:
+        # pc = plotCubeAt([event_1['position'], event_2['position']],
+        #                 sizes=[event_1['size'], event_2['size']],
+        #                 colors=[event_1['color'], event_2['color']], edgecolor="k")
+        ax1.scatter(event_1['position'][0], event_1['position'][1], event_1['position'][2], marker='o', c='y', s=80)
+        ax1.scatter(event_2['position'][0], event_2['position'][1], event_2['position'][2], marker='o', c='b', s=80)
 
-    if points:
-        for point in points:
-            ax1.scatter(point[0], point[1], point[2], marker='o', c='r', s=20)
+    # if points:
+    #     for i, point in enumerate(points):
+    #         if i % 30 == 0:
+    #             ax1.scatter(point[0], point[1], point[2], marker='o', c='r', s=20)
+    #
+    # if focus:
+    #     for i, point in enumerate(focus):
+    #         if i % 30 == 0:
+    #             ax1.scatter(point[0], point[1], point[2], marker='o', c='g', s=20)
 
-    if focus:
-        for point in focus:
-            ax1.scatter(point[0], point[1], point[2], marker='o', c='g', s=20)
-
-    points = np.array(points)
+    points = np.array(points) - focus
 
     ax1.plot(points[:, 0], points[:, 1], points[:, 2], '.r-', linewidth=2)
 
-    if cameras:
-        for i, camera in enumerate(cameras):
-            camera_shooting = np.array([points[i], focus[i]])
-
-            ax1.plot(camera_shooting[:, 0], camera_shooting[:, 1], camera_shooting[:, 2], '.y:', linewidth=2)
+    # if cameras:
+    #     for i, camera in enumerate(cameras):
+    #         camera_shooting = np.array([points[i], focus[i]])
+    #         # camera_shooting = np.array([points[i] - focus[i], [0, 0, 0]])
+    #         if i % 10 == 0:
+    #             ax1.plot(camera_shooting[:, 0], camera_shooting[:, 1], camera_shooting[:, 2], '.y:', linewidth=3)
 
     plt.show()
 
@@ -155,9 +158,9 @@ def camera_shot_angle(camera_pos, focus_pos):
     d_v, dist = line_vector(camera_pos, focus_pos)
 
     s = np.linalg.norm(d_v)
-    theta_1 = np.arccos(d_v[0] / s)
-    theta_2 = np.arccos(d_v[1] / s)
-    theta_3 = np.arccos(d_v[2] / s)
+    theta_1 = np.rad2deg(np.arccos(d_v[0] / s))
+    theta_2 = np.rad2deg(np.arccos(d_v[1] / s))
+    theta_3 = np.rad2deg(np.arccos(d_v[2] / s))
 
     return [theta_1, theta_2, theta_3], d_v
 

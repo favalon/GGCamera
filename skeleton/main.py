@@ -95,12 +95,16 @@ class AnimatedScatter(object):
         self.base_line = np.array([[0, 0], [0, 1], [0, 0]], dtype=np.float32)
         self.target_line = np.concatenate((np.reshape(self.centroid_start, (3, 1)),
                                            np.reshape(self.centroid_end, (3, 1))), axis=1)
+
         self.target_uv, self.target_dist = line_vector(self.target_line[:, 0], self.target_line[:, 1])
         self.action_dist = self.target_dist
         self.rotation_matrix, self.target_dist, self.base2target_dist \
             = rotation_by_direction(self.base_line, self.target_line)
 
         # Setup the figure and axes...
+        self.cameras_points = [[0, 0, 0]]
+        self.focus = [[0, 0, 0]]
+        self.cameras_rotation = [[0, 0, 0]]
         self.fig = plt.figure(figsize=(8, 8))
         self.ax = self.fig.add_subplot(111, projection='3d')
         # Then setup FuncAnimation.
@@ -108,7 +112,10 @@ class AnimatedScatter(object):
 
     def setup_plot(self, lim=5):
         """Initial drawing of the scatter plot."""
-        x, y, z = next(self.stream).T
+
+        data, point, focus, rotate = next(self.stream)
+
+        x, y, z = data.T
         # line = np.array([[0, 1], [0, 1], [0, 0]])
         self.scat = self.ax.scatter(x, y, z, c='y', s=20)
 
@@ -163,20 +170,28 @@ class AnimatedScatter(object):
 
                 tmp = rotate_direction(tmp, self.rotation_matrix)
 
-                moving_increment = frame/len(skeleton_sequence) * self.action_dist
+                moving_increment = 0 # frame/len(skeleton_sequence) * self.action_dist
 
                 move_direction(tmp, self.target_uv, moving_increment, self.target_line[:, 0])
 
-                yield tmp
+                point, focus, rotate = self.cameras_points[frame], self.focus[frame], self.cameras_rotation[frame]
+
+                yield tmp, point, focus, rotate
 
     def update(self, i):
         """Update the scatter plot."""
-        data = next(self.stream)
+        data, point, focus, rotate = next(self.stream)
+        camera_shooting = np.array([point-focus])
+
+        data = np.concatenate((data, camera_shooting), axis=0)
+
         x = data[:, 0]
         y = data[:, 1]
         z = data[:, 2]
         # Set x and y data...
         self.scat._offsets3d = (x, y, z)
+        self.scat.set_array(data[:, 2])
+        self.ax.set_title("rotate theta1: {}, theta2: {}, theta3: {}".format(int(rotate[0]), int(rotate[1]), int(rotate[2])))
         # Set sizes...
         # self.scat.set_sizes(data[:, 3])
         # # Set colors..
@@ -198,7 +213,7 @@ class AnimatedScatter(object):
         rotates = Rotation.from_rotvec([np.deg2rad(-90), np.deg2rad(0), np.deg2rad(0)]).as_matrix()
         scales = (1 * all_scale, 2 * all_scale, 1 * all_scale)
 
-        projection_test_theta = np.deg2rad((120, -120))
+        projection_test_theta = np.deg2rad((-110, 110))
         projection_test_phi = np.deg2rad((170, 170))
 
         # generate the Spindle Torus
@@ -213,7 +228,7 @@ class AnimatedScatter(object):
         # torus = rotate_torus(torus, rotates=rotates)
         # torus = scale_torus(torus, scales=scales)
 
-        event_1, event_2 = generate_event(r, R, rotates=self.rotation_matrix,
+        event_1, event_2 = generate_event(r, R, rotates=np.eye(3),
                                           dist_offset=self.base2target_dist, scales=scales)
 
         # projection
@@ -221,15 +236,18 @@ class AnimatedScatter(object):
                                             rotates=np.eye(3), dist_offset=self.base2target_dist,
                                             scales=scales)
 
-        direct_vectors, angles, focus = camera_line_simulation(event_2['position'], event_1['position'],
-                                                               event_2['position'], event_1['position'],
+        direct_vectors, angles, focus = camera_line_simulation(event_1['position'], event_2['position'],
+                                                               event_1['position'], event_2['position'],
                                                                points, sample=self.frames,
                                                                theta_start=-120, theta_end=120)
 
-        output = output_cameras_track(points, focus)
+        output = output_cameras_track(points, focus, angles)
 
         SaveBasic.save_json(data=output, path=os.path.join(self.path), fn="camera_test.json")
 
+        self.cameras_points = points
+        self.focus = focus
+        self.cameras_rotation = angles
         plt_torus(self.ax, torus, event_1=event_1, event_2=event_2, focus=focus, points=points, cameras=direct_vectors)
 
 

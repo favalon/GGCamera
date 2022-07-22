@@ -1,32 +1,32 @@
-def output_cameras_track(points, focus, frame_offset=1):
+def output_cameras_track(points, focus, angles, frame_offset=1):
     output_list = []
     for i, point in enumerate(points):
         frame = i + frame_offset
         new_frame = {
-                        "Frame": 1,
+                        "Frame": frame,
                         "FocusedName": "Fropp",
                         "LocalPosition": {
-                            "x": -0.5922043,
-                            "y": -0.0287083387,
-                            "z": -0.107094161
+                            "x": points[i][0] - focus[i][0],
+                            "y": points[i][2] - focus[i][2] + 1.4,
+                            "z": points[i][1] - focus[i][1]
                         },
                         "LocalRotation": {
-                            "x": 0.0,
-                            "y": 318.63266,
-                            "z": 0.0
+                            "x": angles[i][2]-90,
+                            "y": angles[i][1],
+                            "z": 0
                         },
                         "ModelWorldPosition": {
-                            "x": 0.515219033,
-                            "y": 0.0287083387,
-                            "z": -0.3110055
+                            "x": 0,
+                            "y": 0,
+                            "z": 0
                         },
                         "ModelWorldRotation": {
                             "x": 0.0,
                             "y": 41.36733,
                             "z": 0.0
                         }
-                    },
+                    }
 
         output_list.append(new_frame)
 
-    return output_list
+    return {'data': output_list}
