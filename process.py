@@ -131,9 +131,9 @@ def camera_line_simulation(e1_pos_env, e2_pos_env, e1_pos_unit, e2_pos_unit, cam
 
     rm_proj, scale_proj = rotation_line(eline_unit, eline_env, scale_env, scale_unit)
 
-    focus_center_x = [e1_pos_unit[0] + (e2_pos_unit[0] - e1_pos_unit[0]) / (sample-1) * i for i in range(sample)]
-    focus_center_y = [e1_pos_unit[1] + (e2_pos_unit[1] - e1_pos_unit[1]) / (sample-1) * i for i in range(sample)]
-    focus_center_z = [e1_pos_unit[2] + (e2_pos_unit[2] - e1_pos_unit[2]) / (sample-1) * i for i in range(sample)]
+    focus_center_x = [e1_pos_unit[0] + (e2_pos_unit[0] - e1_pos_unit[0]) / (sample -1) * i for i in range(sample)]
+    focus_center_y = [e1_pos_unit[1] + (e2_pos_unit[1] - e1_pos_unit[1]) / (sample -1) * i for i in range(sample)]
+    focus_center_z = [e1_pos_unit[2] + (e2_pos_unit[2] - e1_pos_unit[2]) / (sample -1) * i for i in range(sample)]
 
     focus = []
     for i in range(sample):

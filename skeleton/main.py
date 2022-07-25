@@ -213,7 +213,7 @@ class AnimatedScatter(object):
         rotates = Rotation.from_rotvec([np.deg2rad(-90), np.deg2rad(0), np.deg2rad(0)]).as_matrix()
         scales = (1 * all_scale, 2 * all_scale, 1 * all_scale)
 
-        projection_test_theta = np.deg2rad((-110, 110))
+        projection_test_theta = np.deg2rad((-30, 110))
         projection_test_phi = np.deg2rad((170, 170))
 
         # generate the Spindle Torus
