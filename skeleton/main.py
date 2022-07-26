@@ -307,7 +307,7 @@ def decompose_action(path='local_data/skeleton', fn='test_data.json'):
 
 
 if __name__ == '__main__':
-    a = AnimatedScatter(path='local_data/skeleton', fn='test_data.json')
+    a = AnimatedScatter(path='local_data/skeleton/split_action', fn='hop_front_rightfoot_1.json')
     plt.show()
 
     decompose_action()
