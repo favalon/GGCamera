@@ -1,2 +1,9 @@
+<<<<<<< HEAD
 \local_data\skeleton\action_standard_set1.json
 \local_data\skeleton\split_action\*
+=======
+/local_data/skeleton/action_standard_set1.json
+/local_data/skeleton/split_action/*
+local_data/skeleton/action_standard_set1.json
+local_data/skeleton/split_action/*
+>>>>>>> 7244f8d1e8c43478e8f11fc3896ce54426c69258
