@@ -102,7 +102,7 @@ def plot_graph(points_speed, axis=None, act_name='', only_peak=True, show_plot=T
     return
 
 
-def get_single_acceleration(skeleton_sequence, names=None, axis='x', act_name='', plot=True):
+def get_single_acceleration(skeleton_sequence, names=None, axis='x', act_name='', plot=False):
 
     points_speed = {}
     selected_index = [4, 8, 15, 23, 17]
@@ -135,34 +135,56 @@ def get_single_acceleration(skeleton_sequence, names=None, axis='x', act_name=''
             valley, _ = find_peaks(-point_speed, distance=30, height=(-point_max - 0.01, 0.5 * -point_max))
             points_speed[point_name] = (point_speed, peaks, valley)
 
+    if len(peaks) == 0:
+        peaks = np.append(peaks, [0])
+    if len(valley) == 0:
+        valley = np.append(valley, [0])
+
     points_imp = important_point_selection(peaks, valley)
 
-    points_imp.insert(0, 0)
-    points_imp.append(skeleton_sequence.shape[0])
+    if 0 not in points_imp:
+        points_imp.insert(0, 0)
+    if skeleton_sequence.shape[0]-1 not in points_imp:
+        points_imp.append(skeleton_sequence.shape[0]-1)
+
+    point_name, peak_value, peak_i = select_target_point(points_speed)
 
     if plot:
         plot_graph(points_speed, axis=axis, act_name=act_name)
 
-    return points_speed
+    return points_speed, point_name, points_imp
 
 
-def get_accelerations(skeleton_sequence, point_names, act_name='', mix_only=True):
-    if mix_only:
-        mix_acc = get_single_acceleration(skeleton_sequence[:, 0, :, :], names=point_names, axis='mix', act_name=act_name)
+def get_accelerations(skeleton_sequence, point_names, act_name='', mix_only="y"):
+
+    diff_x = max(skeleton_sequence[0, 0, :, 0]) - min(skeleton_sequence[0, 0, :, 0])
+    diff_y = max(skeleton_sequence[0, 0, :, 2]) - min(skeleton_sequence[0, 0, :, 2])
+    diff_z = max(skeleton_sequence[0, 0, :, 1]) - min(skeleton_sequence[0, 0, :, 1])
+
+    max_diff = max(diff_x, diff_y, diff_z)
+
+    if mix_only == 'mix':
+        mix_speed, point_name, points_imp = get_single_acceleration(skeleton_sequence[:, 0, :, :], names=point_names, axis='mix', act_name=act_name)
+        return mix_speed, point_name, points_imp, max_diff
     else:
-        mix_acc = get_single_acceleration(skeleton_sequence[:, 0, :, :], names=point_names, axis='mix',
-                                          act_name=act_name)
-        x_acc = get_single_acceleration(skeleton_sequence[:, 0, :, 0], names=point_names, axis='x', act_name=act_name)
-        y_acc = get_single_acceleration(skeleton_sequence[:, 0, :, 2], names=point_names, axis='y', act_name=act_name)
-        z_acc = get_single_acceleration(skeleton_sequence[:, 0, :, 1], names=point_names, axis='z', act_name=act_name)
+        if mix_only == 'x':
+            x_speed, point_name, points_imp = get_single_acceleration(skeleton_sequence[:, 0, :, 0], names=point_names, axis='x', act_name=act_name)
+            return x_speed, point_name, points_imp, max_diff
+        if mix_only == 'y':
+            y_speed, point_name, points_imp = get_single_acceleration(skeleton_sequence[:, 0, :, 2], names=point_names, axis='y', act_name=act_name)
 
-    return mix_acc
+            return y_speed, point_name, points_imp, max_diff
+        if mix_only == 'z':
+            z_speed, point_name, points_imp = get_single_acceleration(skeleton_sequence[:, 0, :, 1], names=point_names, axis='z', act_name=act_name)
+            return z_speed, point_name, points_imp, max_diff
 
 
 def process_action(skeleton_sequence, action_name=''):
     skeleton_sequence, point_names = get_skeleton_array(skeleton_sequence)
 
-    get_accelerations(skeleton_sequence, point_names, act_name=action_name)
+    mix_speed, point_name, points_imp, max_diff = get_accelerations(skeleton_sequence, point_names, act_name=action_name)
+
+    return mix_speed, point_name, points_imp, max_diff
 
 
 def decompose_action(path='local_data/skeleton', fn='action_standard_set1.json'):

@@ -32,3 +32,12 @@ def important_point_selection(peak, valley):
             pre_flag = cur_flag
 
     return selected_node
+
+
+def get_all_focus_imp(skeleton_sequence, frames_imp_index):
+    all_focus_imp_value = []
+    for frame in range(skeleton_sequence.shape[0]):
+        if frame in frames_imp_index:
+            all_focus_imp_value.append(skeleton_sequence[frame, 0, :, :].mean(axis=0))
+
+    return all_focus_imp_value
