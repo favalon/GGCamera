@@ -1,16 +1,17 @@
+import os
+
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.spatial.transform import Rotation
+
 from camera.output_cameras import output_cameras_track
-import pandas as pd
-import os
 from general.save_load import LoadBasic, SaveBasic
-from utils.line import line_vector, rotation
 from process import generate_spindle_torus, generate_event, \
-    rotate_torus, scale_torus, calculate_point_projection, camera_line_simulation, plt_torus
-from skeleton.trend_analysis import process_action
+    scale_torus, calculate_point_projection, camera_line_simulation, plt_torus
 from skeleton.analysis_support import get_all_focus_imp
+from skeleton.trend_analysis import process_action
+from utils.line import line_vector, rotation
 
 
 def rotation_matrix_from_vectors(vec1, vec2):
@@ -32,15 +33,14 @@ def rotation_by_direction(base_line, target_line):
     uv2, dist2 = line_vector(target_line[:, 0], target_line[:, 1])
     rotation_matrix, scale = rotation(uv1, uv2, dist1, dist2)
 
-    target_line_center = (target_line[:, 1] + target_line[:, 0])/2
-    base_line_center = (np.array([0, 0, 0]))/2
+    target_line_center = (target_line[:, 1] + target_line[:, 0]) / 2
+    base_line_center = (np.array([0, 0, 0])) / 2
     center_dist = target_line_center - base_line_center
 
     return rotation_matrix, scale, center_dist
 
 
 def rotate_direction(points, rotation_matrix):
-
     # rotation_matrix, scale = rotation_by_direction(base_line, target_line)
 
     for i in range(points.shape[0]):
@@ -94,7 +94,7 @@ class AnimatedScatter(object):
         # for test roration
         self.frames = 10
         self.focus_points, self.focus_frames, self.focus_speed, self.focus_seq, self.focus_side, \
-            self.theta_ratio = decompose_action(path=path, fn=fn)
+        self.theta_ratio = decompose_action(path=path, fn=fn)
         self.base_line = np.array([[0, 0], [0, 1], [0, 0]], dtype=np.float32)
         # self.target_line = np.concatenate((np.reshape(self.centroid_start, (3, 1)),
         #                                    np.reshape(self.centroid_end, (3, 1))), axis=1)
@@ -103,7 +103,7 @@ class AnimatedScatter(object):
         self.target_focus_point = get_target_focus_point(path=path, fn=target_fn)
 
         self.target_line = np.concatenate((np.reshape(self.focus_points[0], (3, 1)),
-                                            np.reshape(self.target_focus_point, (3, 1))), axis=1)
+                                           np.reshape(self.target_focus_point, (3, 1))), axis=1)
 
         self.target_uv, self.target_dist = line_vector(self.target_line[:, 0], self.target_line[:, 1])
         self.action_dist = self.target_dist
@@ -180,7 +180,7 @@ class AnimatedScatter(object):
 
                 tmp = rotate_direction(tmp, self.rotation_matrix)
 
-                moving_increment = 0 # frame/len(skeleton_sequence) * self.action_dist
+                moving_increment = 0  # frame/len(skeleton_sequence) * self.action_dist
 
                 move_direction(tmp, self.target_uv, moving_increment, self.target_line[:, 0])
 
@@ -201,7 +201,8 @@ class AnimatedScatter(object):
         # Set x and y data...
         self.scat._offsets3d = (x, y, z)
         self.scat.set_array(data[:, 2])
-        self.ax.set_title("rotate theta1: {}, theta2: {}, theta3: {}".format(int(rotate[0]), int(rotate[1]), int(rotate[2])))
+        self.ax.set_title(
+            "rotate theta1: {}, theta2: {}, theta3: {}".format(int(rotate[0]), int(rotate[1]), int(rotate[2])))
         # Set sizes...
         # self.scat.set_sizes(data[:, 3])
         # # Set colors..
@@ -218,12 +219,13 @@ class AnimatedScatter(object):
         r = 2 * surface_scale
         R = 1 * surface_scale
         h = 2 * np.sqrt(np.square(r) - np.square(R))
-        all_scale = self.target_dist/h/2
+        all_scale = self.target_dist / h / 2
 
         rotates = Rotation.from_rotvec([np.deg2rad(-90), np.deg2rad(0), np.deg2rad(0)]).as_matrix()
-        scales = (1 * all_scale, 3 * all_scale, 1 * all_scale)
+        scales = (0.8 * all_scale, 2 * all_scale, 1 * all_scale)
 
-        projection_test_theta = np.deg2rad((-180 * self.theta_ratio, 180 * self.theta_ratio))
+        # projection_test_theta = np.deg2rad((-180 * self.theta_ratio, 180 * self.theta_ratio))
+        projection_test_theta = np.deg2rad((-80, -80 + 160))
         if self.focus_side == 'left':
             projection_test_phi = np.deg2rad((180, 180))
         else:
@@ -256,6 +258,12 @@ class AnimatedScatter(object):
                                                                theta_start=projection_test_theta[0],
                                                                theta_end=projection_test_theta[1],
                                                                given_focus=self.focus_seq[:, 0, :])
+
+        # direct_vectors, angles, focus = camera_line_simulation(event_1['position'], event_2['position'],
+        #                                                        event_1['position'], event_2['position'],
+        #                                                        points, sample=self.frames,
+        #                                                        theta_start=projection_test_theta[0],
+        #                                                        theta_end=projection_test_theta[1])
 
         output = output_cameras_track(points, focus, angles, frame_offset=301, focus_side=self.focus_side)
 
@@ -300,7 +308,6 @@ def get_moving_min(centroid_start, skeleton_sequence):
 
 
 def get_skeleton_array(skeleton_sequence, centroid="centroid"):
-
     total_frames = len(skeleton_sequence)
     if centroid == 'centroid':
         all_skeleton_xyz = np.zeros((total_frames, 4, len(skeleton_sequence[0]['Skeleton']), 3))
@@ -388,7 +395,7 @@ def decompose_action(path='local_data/skeleton', fn='test_data.json', use_centro
         diff_z = np.max(skeleton_sequence[0, 0, :, 1]) - np.min(skeleton_sequence[0, 0, :, 1])
 
         focus_max_diff = max(diff_x, diff_y, diff_z)
-        theta_ratio = abs(focus_max_diff/max_diff)
+        theta_ratio = abs(focus_max_diff / max_diff)
     return focus_all, frames_imp, mix_speed[point_name], skeleton_sequence[:, 0, :, :], focus_side, theta_ratio
 
 

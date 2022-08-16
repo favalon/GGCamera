@@ -1,9 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from utils.cube import plotCubeAt
+
 from utils.line import line_vector
 from utils.line import rotation as rotation_line
-from sklearn.preprocessing import normalize
 
 
 def generate_spindle_torus(r, R, theta, phi, n=20):
@@ -48,8 +47,8 @@ def generate_event(r, R, rotates, scales, size=(0.5, 0.5, 0.5), dist_offset=None
     cross_point_1 = np.array([0, cross_h_1 * scales[2] * 2, 0])
     cross_point_2 = np.array([0, cross_h_2 * scales[2] * 2, 0])
 
-    cross_point_1 = cross_point_1#  - np.asarray(size) / 2
-    cross_point_2 = cross_point_2#  - np.asarray(size) / 2
+    cross_point_1 = cross_point_1  # - np.asarray(size) / 2
+    cross_point_2 = cross_point_2  # - np.asarray(size) / 2
 
     cross_point_1 = np.dot(rotates, cross_point_1) + dist_offset
     cross_point_2 = np.dot(rotates, cross_point_2) + dist_offset
@@ -90,7 +89,7 @@ def plt_torus(ax, torus, event_1=None, event_2=None, points=None, cameras=None, 
             if i % 10 == 0:
                 ax1.scatter(point[0], point[1], point[2], marker='o', c='g', s=30)
 
-    points = np.array(points) # focus
+    points = np.array(points)  # focus
 
     ax1.plot(points[:, 0], points[:, 1], points[:, 2], '.r-', linewidth=2)
 
@@ -106,7 +105,6 @@ def plt_torus(ax, torus, event_1=None, event_2=None, points=None, cameras=None, 
 
 def calculate_point_projection(R, r, thetas, phis, focus_points, focus_frames, focus_speed, focus_seq,
                                sample=10, scales=None, rotates=None, dist_offset=None):
-
     thetas_seq = np.zeros((sample))
     phis_seq = np.zeros((sample))
 
@@ -132,7 +130,7 @@ def calculate_point_projection(R, r, thetas, phis, focus_points, focus_frames, f
     theta_diff = np.diff(thetas_seq)
     theta_recat = np.zeros((thetas_seq.shape))
     for i in range(theta_diff.shape[0]):
-        theta_recat[i+1] = theta_recat[i] + np.abs(theta_diff[i])
+        theta_recat[i + 1] = theta_recat[i] + np.abs(theta_diff[i])
 
     thetas_seq = np.interp(theta_recat, (theta_recat.min(), theta_recat.max()), (thetas[0], thetas[1]))
     # norm2 = normalize(theta_recat[:, np.newaxis], axis=0).ravel()
@@ -168,9 +166,9 @@ def camera_line_simulation(e1_pos_env, e2_pos_env, e1_pos_unit, e2_pos_unit, cam
 
     rm_proj, scale_proj = rotation_line(eline_unit, eline_env, scale_env, scale_unit)
 
-    focus_center_x = [e1_pos_unit[0] + (e2_pos_unit[0] - e1_pos_unit[0]) / (sample -1) * i for i in range(sample)]
-    focus_center_y = [e1_pos_unit[1] + (e2_pos_unit[1] - e1_pos_unit[1]) / (sample -1) * i for i in range(sample)]
-    focus_center_z = [e1_pos_unit[2] + (e2_pos_unit[2] - e1_pos_unit[2]) / (sample -1) * i for i in range(sample)]
+    focus_center_x = [e1_pos_unit[0] + (e2_pos_unit[0] - e1_pos_unit[0]) / (sample - 1) * i for i in range(sample)]
+    focus_center_y = [e1_pos_unit[1] + (e2_pos_unit[1] - e1_pos_unit[1]) / (sample - 1) * i for i in range(sample)]
+    focus_center_z = [e1_pos_unit[2] + (e2_pos_unit[2] - e1_pos_unit[2]) / (sample - 1) * i for i in range(sample)]
 
     if given_focus is not None:
         focus = np.zeros((given_focus.shape))
@@ -181,7 +179,8 @@ def camera_line_simulation(e1_pos_env, e2_pos_env, e1_pos_unit, e2_pos_unit, cam
     else:
         focus = []
         for i in range(sample):
-            focus_center = [focus_center_x[i], focus_center_y[i], focus_center_z[i]]
+            mid_i = int(len(focus_center_x) / 3)
+            focus_center = [focus_center_x[mid_i], focus_center_y[mid_i], focus_center_z[mid_i]]
             focus.append(focus_center)
 
     # e_center_pos_unit = e2_pos_unit[[]]
@@ -207,7 +206,6 @@ def camera_shot_angle(camera_pos, focus_pos):
     theta_3 = np.rad2deg(np.arccos(d_v[2] / s))
 
     return [theta_1, theta_2, theta_3], d_v
-
 
 # def main():
 #     # basic parameters
