@@ -1,8 +1,7 @@
-import os
-
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 from scipy.spatial.transform import Rotation
 
 from camera.output_cameras import output_cameras_track
@@ -130,9 +129,7 @@ class AnimatedScatter(object):
         elif self.target_dist > 10:
             return 0.6
         else:
-            return 1.7 - self.target_dist/10
-
-
+            return 1.7 - self.target_dist / 10
 
     def setup_plot(self, lim=5):
         """Initial drawing of the scatter plot."""
@@ -286,7 +283,7 @@ class AnimatedScatter(object):
         self.cameras_points = points
         self.focus = focus
         self.cameras_rotation = angles
-        plt_torus(self.ax, torus, event_1=event_1, event_2=event_2, focus=focus, points=points, cameras=direct_vectors)
+        # plt_torus(self.ax, torus, event_1=event_1, event_2=event_2, focus=focus, points=points, cameras=direct_vectors)
 
 
 def get_moving_max(centroid_start, skeleton_sequence, centroid=False):

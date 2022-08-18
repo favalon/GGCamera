@@ -93,12 +93,12 @@ def plt_torus(ax, torus, event_1=None, event_2=None, points=None, cameras=None, 
 
     ax1.plot(points[:, 0], points[:, 1], points[:, 2], '.r-', linewidth=2)
 
-    if cameras:
-        for i, camera in enumerate(cameras):
-            camera_shooting = np.array([points[i], focus[i]])
-            # camera_shooting = np.array([points[i] - focus[i], [0, 0, 0]])
-            if i % 10 == 0:
-                ax1.plot(camera_shooting[:, 0], camera_shooting[:, 1], camera_shooting[:, 2], '.y:', linewidth=3)
+    # if cameras:
+    #     for i, camera in enumerate(cameras):
+    #         camera_shooting = np.array([points[i], focus[i]])
+    #         # camera_shooting = np.array([points[i] - focus[i], [0, 0, 0]])
+    #         if i % 10 == 0:
+    #             ax1.plot(camera_shooting[:, 0], camera_shooting[:, 1], camera_shooting[:, 2], '.y:', linewidth=3)
 
     plt.show()
 
