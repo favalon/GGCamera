@@ -9,7 +9,7 @@ from general.save_load import LoadBasic, SaveBasic
 from process import generate_spindle_torus, generate_event, \
     scale_torus, calculate_point_projection, camera_line_simulation, plt_torus
 from skeleton.analysis_support import get_all_focus_imp, map_skeleton_sequence_diff
-from skeleton.trend_analysis import process_action
+from skeleton.trend_analysis import process_action, get_focus_max_change
 from utils.line import line_vector, rotation
 
 
@@ -85,7 +85,7 @@ def combine_rotation(rotates, rotation_matrix=None):
 class AnimatedScatter(object):
     """An animated scatter plot using matplotlib.animations.FuncAnimation."""
 
-    def __init__(self, path='local_data/skeleton', fn='test_data.json', target_fn='test_data.json', intensity=1):
+    def __init__(self, path='local_data/skeleton', fn='test_data.json', target_fn='test_data.json', intensity=0.5):
         self.path = path
         self.fn = fn
         self.stream = self.data_stream()
@@ -94,6 +94,7 @@ class AnimatedScatter(object):
         self.frames = 10
         self.focus_points, self.focus_frames, self.focus_speed, self.focus_seq, self.focus_side, \
         self.theta_ratio = decompose_action(path=path, fn=fn, intensity=self.intensity)
+        self.speed_average = get_focus_max_change(self.focus_seq)
         self.base_line = np.array([[0, 0], [0, 1], [0, 0]], dtype=np.float32)
         # self.target_line = np.concatenate((np.reshape(self.centroid_start, (3, 1)),
         #                                    np.reshape(self.centroid_end, (3, 1))), axis=1)
@@ -238,14 +239,14 @@ class AnimatedScatter(object):
         if self.focus_side == 'lh':
             projection_test_phi = np.deg2rad((180, 180))
             projection_test_theta = np.deg2rad((-80, -80 + 160 * self.theta_ratio))
-        elif self.focus_side =='rh':
+        elif self.focus_side == 'rh':
             projection_test_phi = np.deg2rad((0, 0))
             projection_test_theta = np.deg2rad((-80, -80 + 160 * self.theta_ratio))
         elif self.focus_side == 'lv':
-            projection_test_phi = np.deg2rad((180, 180 - 60 * self.intensity))
+            projection_test_phi = np.deg2rad((180 + 20 * self.intensity, 180 - 20 * self.intensity))
             projection_test_theta = np.deg2rad((-50, -50))
         elif self.focus_side == 'rv':
-            projection_test_phi = np.deg2rad((0, 60 * self.intensity))
+            projection_test_phi = np.deg2rad((-20 * self.intensity, 12 * self.intensity))
             projection_test_theta = np.deg2rad((-50, -50))
 
         # generate the Spindle Torus
@@ -267,7 +268,8 @@ class AnimatedScatter(object):
         points = calculate_point_projection(R, r, projection_test_theta, projection_test_phi,
                                             self.focus_points, self.focus_frames, self.focus_speed, self.focus_seq,
                                             sample=self.frames, rotates=np.eye(3),
-                                            dist_offset=self.base2target_dist, scales=scales)
+                                            dist_offset=self.base2target_dist, scales=scales,
+                                            speed=self.speed_average)
 
         direct_vectors, angles, focus = camera_line_simulation(event_1['position'], event_2['position'],
                                                                event_1['position'], event_2['position'],
@@ -439,7 +441,8 @@ def decompose_action(path='local_data/skeleton', fn='test_data.json', use_centro
         if theta_ratio < 0.1:
             theta_ratio = 0.1
 
-    return focus_all, frames_imp, mix_speed[point_name], skeleton_sequence[:, 0, :, :], focus_side + focus_dir, theta_ratio
+    return focus_all, frames_imp, mix_speed[point_name], skeleton_sequence[:, 0, :,
+                                                         :], focus_side + focus_dir, theta_ratio
 
 
 def get_target_focus_point(path='local_data/skeleton', fn='test_data.json', use_start=False):

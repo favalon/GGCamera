@@ -104,7 +104,7 @@ def plt_torus(ax, torus, event_1=None, event_2=None, points=None, cameras=None, 
 
 
 def calculate_point_projection(R, r, thetas, phis, focus_points, focus_frames, focus_speed, focus_seq,
-                               sample=10, scales=None, rotates=None, dist_offset=None):
+                               sample=10, scales=None, rotates=None, dist_offset=None, speed=0):
     thetas_seq = np.zeros((sample))
     phis_seq = np.zeros((sample))
 
@@ -147,16 +147,19 @@ def calculate_point_projection(R, r, thetas, phis, focus_points, focus_frames, f
 
     # phis_seq = np.linspace(phis[0], phis[1], sample)
 
-    for i in range(sample):
-        theta = thetas_seq[i]
-        phi = phis_seq[i]
-        x = (R + r * np.cos(theta)) * np.cos(phi) * scales[0]
-        y = (R + r * np.cos(theta)) * np.sin(phi) * scales[2]
-        z = r * np.sin(theta) * scales[1]
+    # dist to character adjust to
+    point = map2point(0, R, r, thetas_seq, phis_seq, scales, rotates, dist_offset)
+    focus = focus_seq[0]
+    dist_adj_ratio = get_dist_adj_ratio(point, focus, speed)
 
-        point = [x, z, y]
-        # point = scale(point, scales)
-        point = np.dot(rotates, point) + dist_offset
+    for i in range(sample):
+        point = map2point(i, R, r, thetas_seq, phis_seq, scales, rotates, dist_offset)
+
+        focus = focus_seq[i].reshape((3,))
+        diff = point - focus
+        # point2focus_dist = np.linalg.norm(point - focus)
+        point = focus + diff * dist_adj_ratio
+        # point2focus_dist_adj = np.linalg.norm(point - focus)
         points.append(point)
 
     return points
@@ -199,6 +202,31 @@ def camera_line_simulation(e1_pos_env, e2_pos_env, e1_pos_unit, e2_pos_unit, cam
         direct_vectors.append(direct_vector)
 
     return direct_vectors, angles, focus
+
+
+def map2point(i, R, r, thetas_seq, phis_seq, scales, rotates, dist_offset):
+    theta = thetas_seq[i]
+    phi = phis_seq[i]
+    x = (R + r * np.cos(theta)) * np.cos(phi) * scales[0]
+    y = (R + r * np.cos(theta)) * np.sin(phi) * scales[2]
+    z = r * np.sin(theta) * scales[1]
+    point = [x, z, y]
+    # point = scale(point, scales)
+    point = np.dot(rotates, point) + dist_offset
+    return point
+
+
+def get_dist_adj_ratio(point, focus, speed):
+    point2focus_dist = np.linalg.norm(point - focus)
+
+    if speed < 0.03:
+        dis_ratio = 1.7 / point2focus_dist
+    elif speed > 0.06:
+        dis_ratio = 4.5 / point2focus_dist
+    else:
+        dis_ratio = (1.7 + 2.8 * speed / 0.06) / point2focus_dist
+
+    return dis_ratio
 
 
 def camera_shot_angle(camera_pos, focus_pos):
