@@ -45,7 +45,7 @@ def get_all_focus_imp(skeleton_sequence, frames_imp_index):
     return all_focus_imp_value
 
 
-def map_skeleton_sequence_diff(skeleton_sequence, skeleton_sequence_ori):
+def map_skeleton_sequence_diff(skeleton_sequence, skeleton_sequence_ori, intensity=0.1):
     # map x,y,z changing to a better focus point
     mapped_skeleton_sequence = np.zeros((skeleton_sequence.shape))
     mapped_skeleton_sequence[0, :, :, :] = skeleton_sequence_ori[0, :, :, :]
@@ -59,12 +59,12 @@ def map_skeleton_sequence_diff(skeleton_sequence, skeleton_sequence_ori):
     z_diff_loc = np.diff(skeleton_sequence[:, 0, 0, 2])
 
     for i in range(x_diff.shape[0]):
-        mapped_skeleton_sequence[i + 1, 2, 0, 0] = mapped_skeleton_sequence[i, 2, 0, 0] + x_diff[i]
-        mapped_skeleton_sequence[i + 1, 2, 0, 1] = mapped_skeleton_sequence[i, 2, 0, 1] + y_diff[i]
-        mapped_skeleton_sequence[i + 1, 2, 0, 2] = mapped_skeleton_sequence[i, 2, 0, 2] + z_diff[i]
+        mapped_skeleton_sequence[i + 1, 2, 0, 0] = mapped_skeleton_sequence[i, 2, 0, 0] + x_diff[i] * intensity
+        mapped_skeleton_sequence[i + 1, 2, 0, 1] = mapped_skeleton_sequence[i, 2, 0, 1] + y_diff[i] * intensity
+        mapped_skeleton_sequence[i + 1, 2, 0, 2] = mapped_skeleton_sequence[i, 2, 0, 2] + z_diff[i] * intensity
 
-        mapped_skeleton_sequence[i + 1, 0, 0, 0] = mapped_skeleton_sequence[i, 0, 0, 0] + x_diff_loc[i]
-        mapped_skeleton_sequence[i + 1, 0, 0, 1] = mapped_skeleton_sequence[i, 0, 0, 1] + y_diff_loc[i]
-        mapped_skeleton_sequence[i + 1, 0, 0, 2] = mapped_skeleton_sequence[i, 0, 0, 2] + z_diff_loc[i]
+        mapped_skeleton_sequence[i + 1, 0, 0, 0] = mapped_skeleton_sequence[i, 0, 0, 0] + x_diff_loc[i] * intensity
+        mapped_skeleton_sequence[i + 1, 0, 0, 1] = mapped_skeleton_sequence[i, 0, 0, 1] + y_diff_loc[i] * intensity
+        mapped_skeleton_sequence[i + 1, 0, 0, 2] = mapped_skeleton_sequence[i, 0, 0, 2] + z_diff_loc[i] * intensity
 
     return mapped_skeleton_sequence

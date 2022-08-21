@@ -93,12 +93,12 @@ def plt_torus(ax, torus, event_1=None, event_2=None, points=None, cameras=None, 
 
     ax1.plot(points[:, 0], points[:, 1], points[:, 2], '.r-', linewidth=2)
 
-    # if cameras:
-    #     for i, camera in enumerate(cameras):
-    #         camera_shooting = np.array([points[i], focus[i]])
-    #         # camera_shooting = np.array([points[i] - focus[i], [0, 0, 0]])
-    #         if i % 10 == 0:
-    #             ax1.plot(camera_shooting[:, 0], camera_shooting[:, 1], camera_shooting[:, 2], '.y:', linewidth=3)
+    if cameras:
+        for i, camera in enumerate(cameras):
+            camera_shooting = np.array([points[i], focus[i]])
+            # camera_shooting = np.array([points[i] - focus[i], [0, 0, 0]])
+            if i % 10 == 0:
+                ax1.plot(camera_shooting[:, 0], camera_shooting[:, 1], camera_shooting[:, 2], '.y:', linewidth=3)
 
     plt.show()
 
@@ -137,11 +137,15 @@ def calculate_point_projection(R, r, thetas, phis, focus_points, focus_frames, f
 
     phis_range = abs(phis[0] - phis[1])
     for frame, focus_y in enumerate(focus_seq[:, 0, 2]):
-        phi = focus_y / focus_seq_y_range * phis_range + focus_seq_y_min
+
+        if phis[0] < phis[1]:
+            phi = (focus_y - focus_seq_y_min) / focus_seq_y_range * phis_range + phis[0]
+        else:
+            phi = phis[0] - (focus_y - focus_seq_y_min) / focus_seq_y_range * phis_range
+        # phi = focus_y / focus_seq_y_range * phis_range + focus_seq_y_min
         phis_seq[frame] = phi
 
-    thetas_seq2 = np.linspace(thetas[0], thetas[1], sample)
-    phis_seq = np.linspace(phis[0], phis[1], sample)
+    # phis_seq = np.linspace(phis[0], phis[1], sample)
 
     for i in range(sample):
         theta = thetas_seq[i]

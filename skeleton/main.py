@@ -85,15 +85,15 @@ def combine_rotation(rotates, rotation_matrix=None):
 class AnimatedScatter(object):
     """An animated scatter plot using matplotlib.animations.FuncAnimation."""
 
-    def __init__(self, path='local_data/skeleton', fn='test_data.json', target_fn='test_data.json'):
+    def __init__(self, path='local_data/skeleton', fn='test_data.json', target_fn='test_data.json', intensity=1):
         self.path = path
         self.fn = fn
         self.stream = self.data_stream()
-
+        self.intensity = intensity
         # for test roration
         self.frames = 10
         self.focus_points, self.focus_frames, self.focus_speed, self.focus_seq, self.focus_side, \
-        self.theta_ratio = decompose_action(path=path, fn=fn)
+        self.theta_ratio = decompose_action(path=path, fn=fn, intensity=self.intensity)
         self.base_line = np.array([[0, 0], [0, 1], [0, 0]], dtype=np.float32)
         # self.target_line = np.concatenate((np.reshape(self.centroid_start, (3, 1)),
         #                                    np.reshape(self.centroid_end, (3, 1))), axis=1)
@@ -203,7 +203,7 @@ class AnimatedScatter(object):
     def update(self, i):
         """Update the scatter plot."""
         data, point, focus, rotate = next(self.stream)
-        camera_shooting = np.array([point + focus])
+        camera_shooting = np.array([point])
 
         data = np.concatenate((data, camera_shooting), axis=0)
 
@@ -235,12 +235,18 @@ class AnimatedScatter(object):
         rotates = Rotation.from_rotvec([np.deg2rad(-90), np.deg2rad(0), np.deg2rad(0)]).as_matrix()
         scales = (0.8 * all_scale, 2 * all_scale, 1 * all_scale)
 
-        # projection_test_theta = np.deg2rad((-180 * self.theta_ratio, 180 * self.theta_ratio))
-        projection_test_theta = np.deg2rad((-80, -80 + 160 * self.theta_ratio))
-        if self.focus_side == 'left':
+        if self.focus_side == 'lh':
             projection_test_phi = np.deg2rad((180, 180))
-        else:
+            projection_test_theta = np.deg2rad((-80, -80 + 160 * self.theta_ratio))
+        elif self.focus_side =='rh':
             projection_test_phi = np.deg2rad((0, 0))
+            projection_test_theta = np.deg2rad((-80, -80 + 160 * self.theta_ratio))
+        elif self.focus_side == 'lv':
+            projection_test_phi = np.deg2rad((180, 180 - 60 * self.intensity))
+            projection_test_theta = np.deg2rad((-50, -50))
+        elif self.focus_side == 'rv':
+            projection_test_phi = np.deg2rad((0, 60 * self.intensity))
+            projection_test_theta = np.deg2rad((-50, -50))
 
         # generate the Spindle Torus
         torus = generate_spindle_torus(r=r, R=R, theta=[0, 2], phi=[0, 2], n=20)
@@ -283,7 +289,7 @@ class AnimatedScatter(object):
         self.cameras_points = points
         self.focus = focus
         self.cameras_rotation = angles
-        # plt_torus(self.ax, torus, event_1=event_1, event_2=event_2, focus=focus, points=points, cameras=direct_vectors)
+        plt_torus(self.ax, torus, event_1=event_1, event_2=event_2, focus=focus, points=points, cameras=direct_vectors)
 
 
 def get_moving_max(centroid_start, skeleton_sequence, centroid=False):
@@ -364,7 +370,7 @@ def get_skeleton_array(skeleton_sequence, centroid="centroid"):
     return all_skeleton_xyz
 
 
-def decompose_action(path='local_data/skeleton', fn='test_data.json', use_centroid=False):
+def decompose_action(path='local_data/skeleton', fn='test_data.json', use_centroid=False, intensity=0.1):
     skeleton_sequence = LoadBasic.load_basic(fn=fn, path=path, file_type='json')
 
     # skeleton_sequence = get_skeleton_array(skeleton_sequence, centroid=False)
@@ -385,11 +391,32 @@ def decompose_action(path='local_data/skeleton', fn='test_data.json', use_centro
     else:
         mix_speed, point_name, frames_imp, max_diff = process_action(skeleton_sequence, action_name=fn.split('.')[0])
 
-        skeleton_sequence_ori = get_skeleton_array(skeleton_sequence, centroid='Bip001Neck')
+        skeleton_sequence_neck = get_skeleton_array(skeleton_sequence, centroid='Bip001Neck')
+        skeleton_sequence_bot = get_skeleton_array(skeleton_sequence, centroid='Bip001Spine')
 
         skeleton_sequence = get_skeleton_array(skeleton_sequence, centroid=point_name)
 
-        skeleton_sequence = map_skeleton_sequence_diff(skeleton_sequence, skeleton_sequence_ori)
+        # get focus side and direction
+        x_diff_range = np.max(skeleton_sequence[:, 0, 0, 0]) - np.min(skeleton_sequence[:, 0, 0, 0])
+        z_diff_range = np.max(skeleton_sequence[:, 0, 0, 1]) - np.min(skeleton_sequence[:, 0, 0, 1])
+        y_diff_range = np.max(skeleton_sequence[:, 0, 0, 2]) - np.min(skeleton_sequence[:, 0, 0, 2])
+
+        if max(x_diff_range, z_diff_range, y_diff_range) == y_diff_range:
+            focus_dir = "v"
+        else:
+            focus_dir = 'h'
+
+        if 'L' in point_name:
+            focus_side = 'l'
+        else:
+            focus_side = 'r'
+
+        if focus_dir == 'v':
+            skeleton_sequence = map_skeleton_sequence_diff(skeleton_sequence, skeleton_sequence_bot,
+                                                           intensity=intensity)
+        else:
+            skeleton_sequence = map_skeleton_sequence_diff(skeleton_sequence, skeleton_sequence_neck,
+                                                           intensity=intensity)
 
         focus_start = skeleton_sequence[0, 2, :, :].mean(axis=0)
 
@@ -398,11 +425,6 @@ def decompose_action(path='local_data/skeleton', fn='test_data.json', use_centro
         focus_min, dist_min, frame_min = get_moving_min(focus_start, skeleton_sequence)
 
         focus_all = get_all_focus_imp(skeleton_sequence, frames_imp)
-
-        if 'L' in point_name:
-            focus_side = 'left'
-        else:
-            focus_side = 'right'
 
         # theta moving ratio
         diff_x = np.max(skeleton_sequence[:, 0, :, 0]) - np.min(skeleton_sequence[:, 0, :, 0])
@@ -417,7 +439,7 @@ def decompose_action(path='local_data/skeleton', fn='test_data.json', use_centro
         if theta_ratio < 0.1:
             theta_ratio = 0.1
 
-    return focus_all, frames_imp, mix_speed[point_name], skeleton_sequence[:, 0, :, :], focus_side, theta_ratio
+    return focus_all, frames_imp, mix_speed[point_name], skeleton_sequence[:, 0, :, :], focus_side + focus_dir, theta_ratio
 
 
 def get_target_focus_point(path='local_data/skeleton', fn='test_data.json', use_start=False):
