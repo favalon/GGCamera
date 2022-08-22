@@ -219,12 +219,12 @@ def map2point(i, R, r, thetas_seq, phis_seq, scales, rotates, dist_offset):
 def get_dist_adj_ratio(point, focus, speed):
     point2focus_dist = np.linalg.norm(point - focus)
 
-    if speed < 0.03:
-        dis_ratio = 1.7 / point2focus_dist
-    elif speed > 0.06:
+    if speed < 0.04:
+        dis_ratio = 1 / point2focus_dist
+    elif speed > 0.08:
         dis_ratio = 4.5 / point2focus_dist
     else:
-        dis_ratio = (1.7 + 2.8 * speed / 0.06) / point2focus_dist
+        dis_ratio = (1.5 + 3.5 * speed / 0.08) / point2focus_dist
 
     return dis_ratio
 

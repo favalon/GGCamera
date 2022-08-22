@@ -85,7 +85,8 @@ def combine_rotation(rotates, rotation_matrix=None):
 class AnimatedScatter(object):
     """An animated scatter plot using matplotlib.animations.FuncAnimation."""
 
-    def __init__(self, path='local_data/skeleton', fn='test_data.json', target_fn='test_data.json', intensity=0.5):
+    def __init__(self, path='local_data/skeleton', fn='test_data.json', target_fn='test_data.json',
+                 intensity=0.5, is_moving=False):
         self.path = path
         self.fn = fn
         self.stream = self.data_stream()
@@ -93,7 +94,7 @@ class AnimatedScatter(object):
         # for test roration
         self.frames = 10
         self.focus_points, self.focus_frames, self.focus_speed, self.focus_seq, self.focus_side, \
-        self.theta_ratio = decompose_action(path=path, fn=fn, intensity=self.intensity)
+        self.theta_ratio = decompose_action(path=path, fn=fn, intensity=self.intensity, is_moving=is_moving)
         self.speed_average = get_focus_max_change(self.focus_seq)
         self.base_line = np.array([[0, 0], [0, 1], [0, 0]], dtype=np.float32)
         # self.target_line = np.concatenate((np.reshape(self.centroid_start, (3, 1)),
@@ -372,7 +373,11 @@ def get_skeleton_array(skeleton_sequence, centroid="centroid"):
     return all_skeleton_xyz
 
 
-def decompose_action(path='local_data/skeleton', fn='test_data.json', use_centroid=False, intensity=0.1):
+def decompose_action(path='local_data/skeleton', fn='test_data.json', use_centroid=False, intensity=0.1,
+                     is_moving=False, position=2):
+
+    # position == 2, use world position, position == 0, use local position
+
     skeleton_sequence = LoadBasic.load_basic(fn=fn, path=path, file_type='json')
 
     # skeleton_sequence = get_skeleton_array(skeleton_sequence, centroid=False)
@@ -380,7 +385,7 @@ def decompose_action(path='local_data/skeleton', fn='test_data.json', use_centro
     # 1. get focus point:
     if use_centroid:
         skeleton_sequence = get_skeleton_array(skeleton_sequence, centroid="centroid")
-        focus_start = skeleton_sequence[0, 0, :, :].mean(axis=0)
+        focus_start = skeleton_sequence[0, position, :, :].mean(axis=0)
 
         focus_max, dist_max, frame_max = get_moving_max(focus_start, skeleton_sequence)
 
@@ -399,9 +404,14 @@ def decompose_action(path='local_data/skeleton', fn='test_data.json', use_centro
         skeleton_sequence = get_skeleton_array(skeleton_sequence, centroid=point_name)
 
         # get focus side and direction
-        x_diff_range = np.max(skeleton_sequence[:, 0, 0, 0]) - np.min(skeleton_sequence[:, 0, 0, 0])
-        z_diff_range = np.max(skeleton_sequence[:, 0, 0, 1]) - np.min(skeleton_sequence[:, 0, 0, 1])
-        y_diff_range = np.max(skeleton_sequence[:, 0, 0, 2]) - np.min(skeleton_sequence[:, 0, 0, 2])
+        # x_diff_range = np.max(skeleton_sequence[:, 0, 0, 0]) - np.min(skeleton_sequence[:, 0, 0, 0])
+        # z_diff_range = np.max(skeleton_sequence[:, 0, 0, 1]) - np.min(skeleton_sequence[:, 0, 0, 1])
+        # y_diff_range = np.max(skeleton_sequence[:, 0, 0, 2]) - np.min(skeleton_sequence[:, 0, 0, 2])
+
+        # use world position
+        x_diff_range = np.max(skeleton_sequence[:, position, 0, 0]) - np.min(skeleton_sequence[:, position, 0, 0])
+        z_diff_range = np.max(skeleton_sequence[:, position, 0, 1]) - np.min(skeleton_sequence[:, position, 0, 1])
+        y_diff_range = np.max(skeleton_sequence[:, position, 0, 2]) - np.min(skeleton_sequence[:, position, 0, 2])
 
         if max(x_diff_range, z_diff_range, y_diff_range) == y_diff_range:
             focus_dir = "v"
@@ -415,12 +425,12 @@ def decompose_action(path='local_data/skeleton', fn='test_data.json', use_centro
 
         if focus_dir == 'v':
             skeleton_sequence = map_skeleton_sequence_diff(skeleton_sequence, skeleton_sequence_bot,
-                                                           intensity=intensity)
+                                                           intensity=intensity, is_moving=is_moving)
         else:
             skeleton_sequence = map_skeleton_sequence_diff(skeleton_sequence, skeleton_sequence_neck,
-                                                           intensity=intensity)
+                                                           intensity=intensity, is_moving=is_moving)
 
-        focus_start = skeleton_sequence[0, 2, :, :].mean(axis=0)
+        focus_start = skeleton_sequence[0, position, :, :].mean(axis=0)
 
         focus_max, dist_max, frame_max = get_moving_max(focus_start, skeleton_sequence)
 
@@ -441,7 +451,7 @@ def decompose_action(path='local_data/skeleton', fn='test_data.json', use_centro
         if theta_ratio < 0.1:
             theta_ratio = 0.1
 
-    return focus_all, frames_imp, mix_speed[point_name], skeleton_sequence[:, 0, :,
+    return focus_all, frames_imp, mix_speed[point_name], skeleton_sequence[:, position, :,
                                                          :], focus_side + focus_dir, theta_ratio
 
 
