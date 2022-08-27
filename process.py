@@ -104,7 +104,7 @@ def plt_torus(ax, torus, event_1=None, event_2=None, points=None, cameras=None, 
 
 
 def calculate_point_projection(R, r, thetas, phis, focus_points, focus_frames, focus_speed, focus_seq,
-                               sample=10, scales=None, rotates=None, dist_offset=None, speed=0):
+                               sample=10, scales=None, rotates=None, dist_offset=None, speed=0, action_consis=True):
     thetas_seq = np.zeros((sample))
     phis_seq = np.zeros((sample))
 
@@ -146,6 +146,9 @@ def calculate_point_projection(R, r, thetas, phis, focus_points, focus_frames, f
         phis_seq[frame] = phi
 
     # phis_seq = np.linspace(phis[0], phis[1], sample)
+    if not action_consis:
+        thetas_seq = np.linspace(thetas[0], thetas[1], sample)
+        phis_seq = np.linspace(phis[0], phis[1], sample)
 
     # dist to character adjust to
     point = map2point(0, R, r, thetas_seq, phis_seq, scales, rotates, dist_offset)
@@ -166,31 +169,39 @@ def calculate_point_projection(R, r, thetas, phis, focus_points, focus_frames, f
 
 
 def camera_line_simulation(e1_pos_env, e2_pos_env, e1_pos_unit, e2_pos_unit, camera_poss, theta_start=-120,
-                           theta_end=120, sample=49, given_focus=None):
+                           theta_end=120, sample=49, given_focus=None, theta_ratio=1):
     # calculate the rotation any scale use to rotation unit event line to env event line
     eline_env, scale_env = line_vector(e1_pos_env, e2_pos_env)
     eline_unit, scale_unit = line_vector(e1_pos_unit, e2_pos_unit)
 
     rm_proj, scale_proj = rotation_line(eline_unit, eline_env, scale_env, scale_unit)
 
-    focus_center_x = [e1_pos_unit[0] + (e2_pos_unit[0] - e1_pos_unit[0]) / (sample - 1) * i for i in range(sample)]
-    focus_center_y = [e1_pos_unit[1] + (e2_pos_unit[1] - e1_pos_unit[1]) / (sample - 1) * i for i in range(sample)]
-    focus_center_z = [e1_pos_unit[2] + (e2_pos_unit[2] - e1_pos_unit[2]) / (sample - 1) * i for i in range(sample)]
+    focus_center_x = np.array([e1_pos_unit[0] + (e2_pos_unit[0] - e1_pos_unit[0]) * theta_ratio / (sample - 1) * i
+                               for i in range(sample)])
+    focus_center_y = np.array([e1_pos_unit[1] + (e2_pos_unit[1] - e1_pos_unit[1]) * theta_ratio / (sample - 1) * i
+                               for i in range(sample)])
+    focus_center_z = np.array([e1_pos_unit[2] + (e2_pos_unit[2] - e1_pos_unit[2]) * theta_ratio / (sample - 1) * i
+                               for i in range(sample)])
 
     if given_focus is not None:
         focus = np.zeros((given_focus.shape))
-        focus[:, 0] = given_focus[:, 0]
-        focus[:, 1] = given_focus[:, 1]
+        focus[:, 0] = given_focus[:, 0] + focus_center_x[:]
+        focus[:, 1] = given_focus[:, 1] + focus_center_y[:]
         focus[:, 2] = given_focus[:, 2]
         focus = focus.tolist()
+
     else:
         focus = []
         for i in range(sample):
             mid_i = int(len(focus_center_x) / 3)
-            focus_center = [focus_center_x[mid_i], focus_center_y[mid_i], focus_center_z[mid_i]]
+            focus_center = [focus_center_x[i], focus_center_y[i], focus_center_z[i]]
             focus.append(focus_center)
 
-    # e_center_pos_unit = e2_pos_unit[[]]
+    # focus = []
+    # for i in range(sample):
+    #     mid_i = int(len(focus_center_x) / 3)
+    #     focus_center = [focus_center_x[i], focus_center_y[i], focus_center_z[i]]
+    #     focus.append(focus_center)
 
     angles = []
     direct_vectors = []
@@ -220,11 +231,11 @@ def get_dist_adj_ratio(point, focus, speed):
     point2focus_dist = np.linalg.norm(point - focus)
 
     if speed < 0.04:
-        dis_ratio = 1 / point2focus_dist
+        dis_ratio = 1.3 / point2focus_dist
     elif speed > 0.08:
-        dis_ratio = 4.5 / point2focus_dist
+        dis_ratio = 3 / point2focus_dist
     else:
-        dis_ratio = (1.5 + 3.5 * speed / 0.08) / point2focus_dist
+        dis_ratio = (1 + 2 * speed / 0.08) / point2focus_dist
 
     return dis_ratio
 

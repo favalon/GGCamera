@@ -7,7 +7,7 @@ def output_cameras_track(points, focus, angles, frame_offset=1, focus_side='left
                         "FocusedName": "Fropp",
                         "LocalPosition": {
                             "x": points[i][0], # + focus[i][0],
-                            "y": points[i][2],
+                            "y": points[i][2] if points[i][2] > 0.1 else 0.1,
                             "z": points[i][1] # + focus[i][1]
                         },
                         "LocalRotation": {

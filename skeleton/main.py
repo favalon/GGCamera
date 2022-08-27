@@ -1,6 +1,7 @@
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
+import math
 import os
 from scipy.spatial.transform import Rotation
 
@@ -86,7 +87,7 @@ class AnimatedScatter(object):
     """An animated scatter plot using matplotlib.animations.FuncAnimation."""
 
     def __init__(self, path='local_data/skeleton', fn='test_data.json', target_fn='test_data.json',
-                 intensity=0.5, is_moving=False):
+                 intensity=0.2, is_moving=False, play_animation=True):
         self.path = path
         self.fn = fn
         self.stream = self.data_stream()
@@ -116,14 +117,15 @@ class AnimatedScatter(object):
 
         self.scale_ratio = self.calculate_scale_ratio()
 
-        # Setup the figure and axes...
-        self.cameras_points = [[0, 0, 0]]
-        self.focus = [[0, 0, 0]]
-        self.cameras_rotation = [[0, 0, 0]]
-        self.fig = plt.figure(figsize=(8, 8))
-        self.ax = self.fig.add_subplot(111, projection='3d')
-        # Then setup FuncAnimation.
-        self.ani = animation.FuncAnimation(self.fig, self.update, interval=40, init_func=self.setup_plot, blit=False)
+        if play_animation:
+            # Setup the figure and axes...
+            self.cameras_points = [[0, 0, 0]]
+            self.focus = [[0, 0, 0]]
+            self.cameras_rotation = [[0, 0, 0]]
+            self.fig = plt.figure(figsize=(8, 8))
+            self.ax = self.fig.add_subplot(111, projection='3d')
+            # Then setup FuncAnimation.
+            self.ani = animation.FuncAnimation(self.fig, self.update, interval=40, init_func=self.setup_plot, blit=False)
 
     def calculate_scale_ratio(self):
         if self.target_dist < 2:
@@ -232,7 +234,7 @@ class AnimatedScatter(object):
         r = 2
         R = 1
         h = 2 * np.sqrt(np.square(r) - np.square(R))
-        all_scale = self.target_dist / h * self.scale_ratio
+        all_scale = self.target_dist / h / 2 * self.scale_ratio
 
         rotates = Rotation.from_rotvec([np.deg2rad(-90), np.deg2rad(0), np.deg2rad(0)]).as_matrix()
         scales = (0.8 * all_scale, 2 * all_scale, 1 * all_scale)
@@ -270,14 +272,15 @@ class AnimatedScatter(object):
                                             self.focus_points, self.focus_frames, self.focus_speed, self.focus_seq,
                                             sample=self.frames, rotates=np.eye(3),
                                             dist_offset=self.base2target_dist, scales=scales,
-                                            speed=self.speed_average)
+                                            speed=self.speed_average, action_consis=True)
 
         direct_vectors, angles, focus = camera_line_simulation(event_1['position'], event_2['position'],
                                                                event_1['position'], event_2['position'],
                                                                points, sample=self.frames,
                                                                theta_start=projection_test_theta[0],
                                                                theta_end=projection_test_theta[1],
-                                                               given_focus=self.focus_seq[:, 0, :])
+                                                               given_focus=self.focus_seq[:, 0, :],
+                                                               theta_ratio=0.8)
 
         # direct_vectors, angles, focus = camera_line_simulation(event_1['position'], event_2['position'],
         #                                                        event_1['position'], event_2['position'],
@@ -287,12 +290,13 @@ class AnimatedScatter(object):
 
         output = output_cameras_track(points, focus, angles, frame_offset=301, focus_side=self.focus_side)
 
-        SaveBasic.save_json(data=output, path=os.path.join(self.path), fn="camera_test.json")
+        SaveBasic.save_json(data=output, path=os.path.join(self.path, 'camera_output'),
+                            fn="camera_{}_int_{}.json".format(math.ceil(self.target_dist), self.intensity))
 
         self.cameras_points = points
         self.focus = focus
         self.cameras_rotation = angles
-        plt_torus(self.ax, torus, event_1=event_1, event_2=event_2, focus=focus, points=points, cameras=direct_vectors)
+        # plt_torus(self.ax, torus, event_1=event_1, event_2=event_2, focus=focus, points=points, cameras=direct_vectors)
 
 
 def get_moving_max(centroid_start, skeleton_sequence, centroid=False):
@@ -399,7 +403,7 @@ def decompose_action(path='local_data/skeleton', fn='test_data.json', use_centro
         mix_speed, point_name, frames_imp, max_diff = process_action(skeleton_sequence, action_name=fn.split('.')[0])
 
         skeleton_sequence_neck = get_skeleton_array(skeleton_sequence, centroid='Bip001Neck')
-        skeleton_sequence_bot = get_skeleton_array(skeleton_sequence, centroid='Bip001Spine')
+        skeleton_sequence_bot = get_skeleton_array(skeleton_sequence, centroid='Bip001Spine2')
 
         skeleton_sequence = get_skeleton_array(skeleton_sequence, centroid=point_name)
 
@@ -467,7 +471,10 @@ def get_target_focus_point(path='local_data/skeleton', fn='test_data.json', use_
 
 
 if __name__ == '__main__':
-    a = AnimatedScatter(path='local_data/skeleton', fn='actor_data.json', target_fn='target_data.json')
-    plt.show()
+    for intensity in [0.2, 0.6, 1]:
+        for obj_dist in ['2', '4', '8']:
+            a = AnimatedScatter(path='local_data/skeleton', fn='actor_data.json',
+                                target_fn='dis_{}.json'.format(obj_dist), intensity=intensity)
+            plt.show()
 
     # decompose_action()
