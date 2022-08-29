@@ -280,7 +280,7 @@ class AnimatedScatter(object):
                                                                theta_start=projection_test_theta[0],
                                                                theta_end=projection_test_theta[1],
                                                                given_focus=self.focus_seq[:, 0, :],
-                                                               theta_ratio=0.8)
+                                                               theta_ratio=self.theta_ratio, intensity=self.intensity)
 
         # direct_vectors, angles, focus = camera_line_simulation(event_1['position'], event_2['position'],
         #                                                        event_1['position'], event_2['position'],
@@ -296,7 +296,7 @@ class AnimatedScatter(object):
         self.cameras_points = points
         self.focus = focus
         self.cameras_rotation = angles
-        # plt_torus(self.ax, torus, event_1=event_1, event_2=event_2, focus=focus, points=points, cameras=direct_vectors)
+        plt_torus(self.ax, torus, event_1=event_1, event_2=event_2, focus=focus, points=points, cameras=direct_vectors)
 
 
 def get_moving_max(centroid_start, skeleton_sequence, centroid=False):
@@ -472,7 +472,7 @@ def get_target_focus_point(path='local_data/skeleton', fn='test_data.json', use_
 
 if __name__ == '__main__':
     for intensity in [0.2, 0.6, 1]:
-        for obj_dist in ['2', '4', '8']:
+        for obj_dist in [8, 10, 14]:
             a = AnimatedScatter(path='local_data/skeleton', fn='actor_data.json',
                                 target_fn='dis_{}.json'.format(obj_dist), intensity=intensity)
             plt.show()
