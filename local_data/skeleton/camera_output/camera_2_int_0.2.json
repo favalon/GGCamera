@@ -1,0 +1,1948 @@
+{
+  "data": [
+    {
+      "Frame": 301,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.83106317413954,
+        "y": 1.482535,
+        "z": -1.304248006473732
+      },
+      "LocalRotation": {
+        "x": 0.0,
+        "y": -49.389032876477884,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 302,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.8367964222040724,
+        "y": 1.4819034783470542,
+        "z": -1.304202382871162
+      },
+      "LocalRotation": {
+        "x": -0.07314640124073435,
+        "y": -48.31872922437774,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 303,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.8451011626030087,
+        "y": 1.4811625923581906,
+        "z": -1.3029019985843007
+      },
+      "LocalRotation": {
+        "x": -0.15513995497782673,
+        "y": -47.43728406252143,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 304,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.855851436413748,
+        "y": 1.4803150892244332,
+        "z": -1.3002707032068064
+      },
+      "LocalRotation": {
+        "x": -0.24480862249185975,
+        "y": -46.733109302817454,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 305,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.8688936374634205,
+        "y": 1.4793642689780995,
+        "z": -1.2962189772114026
+      },
+      "LocalRotation": {
+        "x": -0.34107041816652384,
+        "y": -46.1935735997846,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 306,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.8840596723334874,
+        "y": 1.4783138443562003,
+        "z": -1.2906470998969086
+      },
+      "LocalRotation": {
+        "x": -0.442959534359602,
+        "y": -45.80586838496964,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 307,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.9012477781471909,
+        "y": 1.4771676077151656,
+        "z": -1.2834074631552914
+      },
+      "LocalRotation": {
+        "x": -0.5496485441674395,
+        "y": -45.56136959594272,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 308,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.9204088531110667,
+        "y": 1.4759300169398821,
+        "z": -1.2743067240713395
+      },
+      "LocalRotation": {
+        "x": -0.660376257122735,
+        "y": -45.454943550228215,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 309,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.9413837368061596,
+        "y": 1.4746044194169587,
+        "z": -1.2632020318657584
+      },
+      "LocalRotation": {
+        "x": -0.7746428088045292,
+        "y": -45.4766472796165,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 310,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.9639932745797395,
+        "y": 1.4731937639543373,
+        "z": -1.2499655327209578
+      },
+      "LocalRotation": {
+        "x": -0.8921020587255981,
+        "y": -45.616339339536744,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 311,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.983540013090356,
+        "y": 1.4716277446781805,
+        "z": -1.237916470703854
+      },
+      "LocalRotation": {
+        "x": -1.020023595082364,
+        "y": -45.62196444042587,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 312,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.991924755767682,
+        "y": 1.471735384996826,
+        "z": -1.2315701418860105
+      },
+      "LocalRotation": {
+        "x": -0.993756855123678,
+        "y": -45.198073555954494,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 313,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.9950119645381559,
+        "y": 1.4717589979335846,
+        "z": -1.229170835224828
+      },
+      "LocalRotation": {
+        "x": -0.9766077852553963,
+        "y": -44.515800844376805,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 314,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.9950768877595475,
+        "y": 1.4717133018444815,
+        "z": -1.2291750942768735
+      },
+      "LocalRotation": {
+        "x": -0.9662631731951734,
+        "y": -43.69311940003912,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 315,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.9966675724831665,
+        "y": 1.4716514731915158,
+        "z": -1.2279317262569511
+      },
+      "LocalRotation": {
+        "x": -0.957393887226587,
+        "y": -42.968908105251614,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 316,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.9981082957688664,
+        "y": 1.471620627087318,
+        "z": -1.2267584395665312
+      },
+      "LocalRotation": {
+        "x": -0.9460100301764385,
+        "y": -42.26156918989375,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 317,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 0.9990906613525653,
+        "y": 1.4716258312437402,
+        "z": -1.2259132711608776
+      },
+      "LocalRotation": {
+        "x": -0.9317961302295572,
+        "y": -41.55564867613323,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 318,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0001683346413532,
+        "y": 1.4716337209503458,
+        "z": -1.224983180539199
+      },
+      "LocalRotation": {
+        "x": -0.917635165067324,
+        "y": -40.8748027039433,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 319,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.001131320197187,
+        "y": 1.4716352844445948,
+        "z": -1.224153609205939
+      },
+      "LocalRotation": {
+        "x": -0.9042734351364459,
+        "y": -40.20781851569026,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 320,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0018150288913426,
+        "y": 1.471627495867494,
+        "z": -1.2235688264027513
+      },
+      "LocalRotation": {
+        "x": -0.8919227700278896,
+        "y": -39.546435424368376,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 321,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0023107030196967,
+        "y": 1.4716128529572892,
+        "z": -1.2231500142511893
+      },
+      "LocalRotation": {
+        "x": -0.8803479666544973,
+        "y": -38.89490954753739,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 322,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0027891996576357,
+        "y": 1.471595864805711,
+        "z": -1.2227466515859353
+      },
+      "LocalRotation": {
+        "x": -0.8691763003718478,
+        "y": -38.261002622499355,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 323,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0032543399790164,
+        "y": 1.471576863695418,
+        "z": -1.2223554902174751
+      },
+      "LocalRotation": {
+        "x": -0.8583731944354867,
+        "y": -37.64430054078733,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 324,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.003370939258408,
+        "y": 1.471565993076266,
+        "z": -1.222247138654606
+      },
+      "LocalRotation": {
+        "x": -0.847141841180914,
+        "y": -37.03021708454724,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 325,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0037194190320256,
+        "y": 1.4715463803732536,
+        "z": -1.2219533817140957
+      },
+      "LocalRotation": {
+        "x": -0.8367992265291093,
+        "y": -36.442704249069855,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 326,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0041504722145844,
+        "y": 1.4715228814078418,
+        "z": -1.2215943716902669
+      },
+      "LocalRotation": {
+        "x": -0.82695096434108,
+        "y": -35.874722750893,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 327,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0045597344271635,
+        "y": 1.471498807770006,
+        "z": -1.2212542648645892
+      },
+      "LocalRotation": {
+        "x": -0.8173357679144999,
+        "y": -35.321405057018154,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 328,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.004910438443519,
+        "y": 1.4714756057721876,
+        "z": -1.2209625444185461
+      },
+      "LocalRotation": {
+        "x": -0.8078428356362082,
+        "y": -34.78081979698502,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 329,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0052384328037036,
+        "y": 1.4714526911105814,
+        "z": -1.2206898813159364
+      },
+      "LocalRotation": {
+        "x": -0.798515705936012,
+        "y": -34.25396129722054,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 330,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.005541726005426,
+        "y": 1.4714302820964993,
+        "z": -1.2204378829597315
+      },
+      "LocalRotation": {
+        "x": -0.789336891189933,
+        "y": -33.74029283979333,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 331,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.005821916991098,
+        "y": 1.471408792879342,
+        "z": -1.2202050314619504
+      },
+      "LocalRotation": {
+        "x": -0.7802761261952611,
+        "y": -33.23944159164078,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 332,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0060780619382863,
+        "y": 1.4713885477156168,
+        "z": -1.2199920697000595
+      },
+      "LocalRotation": {
+        "x": -0.7713104359689424,
+        "y": -32.750943796017445,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 333,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0063117031962159,
+        "y": 1.471369909387357,
+        "z": -1.219797596731237
+      },
+      "LocalRotation": {
+        "x": -0.7624154070517477,
+        "y": -32.27444868528755,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 334,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0065211985790374,
+        "y": 1.471353223019063,
+        "z": -1.2196227740854526
+      },
+      "LocalRotation": {
+        "x": -0.7535687303333276,
+        "y": -31.809502026639393,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 335,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0067064305620648,
+        "y": 1.4713387743417168,
+        "z": -1.2194678177659077
+      },
+      "LocalRotation": {
+        "x": -0.7447528656636706,
+        "y": -31.35571122285414,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 336,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0068693731032363,
+        "y": 1.471326890822286,
+        "z": -1.2193309646599007
+      },
+      "LocalRotation": {
+        "x": -0.7359485987435477,
+        "y": -30.91278135081762,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 337,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.007006948799092,
+        "y": 1.4713180122938558,
+        "z": -1.2192146937123087
+      },
+      "LocalRotation": {
+        "x": -0.7271298599498692,
+        "y": -30.480246562784696,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 338,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0071205396342944,
+        "y": 1.4713123666991188,
+        "z": -1.2191176857844632
+      },
+      "LocalRotation": {
+        "x": -0.7182857040978092,
+        "y": -30.057818694569146,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 339,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0072090569162753,
+        "y": 1.471310416344383,
+        "z": -1.2190407475725777
+      },
+      "LocalRotation": {
+        "x": -0.7093905715697986,
+        "y": -29.64513155135854,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 340,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.007274566830488,
+        "y": 1.4713123666991188,
+        "z": -1.218981973194871
+      },
+      "LocalRotation": {
+        "x": -0.7004363970882252,
+        "y": -29.241942991339723,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 341,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0073137421569311,
+        "y": 1.4713187009376265,
+        "z": -1.218944020976647
+      },
+      "LocalRotation": {
+        "x": -0.6913978276508885,
+        "y": -28.84783534930951,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 342,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0073296839579473,
+        "y": 1.4713296084770742,
+        "z": -1.2189240361728768
+      },
+      "LocalRotation": {
+        "x": -0.6822691555206859,
+        "y": -28.462625411528403,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 343,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.007338404580519,
+        "y": 1.4713455114930134,
+        "z": -1.2189087013653526
+      },
+      "LocalRotation": {
+        "x": -0.6730318430838622,
+        "y": -28.086575346963784,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 344,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0073779304360495,
+        "y": 1.471366503088798,
+        "z": -1.218867301914016
+      },
+      "LocalRotation": {
+        "x": -0.6636891716223943,
+        "y": -27.720653939497943,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 345,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.007439058808838,
+        "y": 1.4713933505644803,
+        "z": -1.2188065830457382
+      },
+      "LocalRotation": {
+        "x": -0.6542017694960975,
+        "y": -27.364226840886847,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 346,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0074650239069067,
+        "y": 1.4714261646809463,
+        "z": -1.2187706067896822
+      },
+      "LocalRotation": {
+        "x": -0.6445670810629878,
+        "y": -27.015109821809613,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 347,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.007492130514482,
+        "y": 1.4714627751669185,
+        "z": -1.2187331674222153
+      },
+      "LocalRotation": {
+        "x": -0.6349173987635481,
+        "y": -26.67420668270257,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 348,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0076260035815965,
+        "y": 1.471501620133378,
+        "z": -1.2186133568160713
+      },
+      "LocalRotation": {
+        "x": -0.6253491469751253,
+        "y": -26.344624396754213,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 349,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.007885301691224,
+        "y": 1.471541998094712,
+        "z": -1.2183971144169132
+      },
+      "LocalRotation": {
+        "x": -0.6159016890733113,
+        "y": -26.02656696456595,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 350,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0082816651075999,
+        "y": 1.4715828351518931,
+        "z": -1.2180751016482187
+      },
+      "LocalRotation": {
+        "x": -0.6066330777230888,
+        "y": -25.720021059711385,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 351,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0088354324398765,
+        "y": 1.471621219417275,
+        "z": -1.2176310961786099
+      },
+      "LocalRotation": {
+        "x": -0.5976998062174204,
+        "y": -25.425242374315296,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 352,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0095228321327,
+        "y": 1.4716550705124731,
+        "z": -1.217083332660818
+      },
+      "LocalRotation": {
+        "x": -0.5892035087657916,
+        "y": -25.141114487264854,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 353,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0102991030186703,
+        "y": 1.471684577854655,
+        "z": -1.2164664029375039
+      },
+      "LocalRotation": {
+        "x": -0.5811183114669518,
+        "y": -24.865934266934477,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 354,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0111361266285244,
+        "y": 1.4717097414438205,
+        "z": -1.2158022249137674
+      },
+      "LocalRotation": {
+        "x": -0.5734301510630218,
+        "y": -24.598569539526302,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 355,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0120111365413054,
+        "y": 1.4717306575937839,
+        "z": -1.2151086201315555
+      },
+      "LocalRotation": {
+        "x": -0.566120673814126,
+        "y": -24.338097099248802,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 356,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0128956001271139,
+        "y": 1.4717471722024427,
+        "z": -1.2144081616867803
+      },
+      "LocalRotation": {
+        "x": -0.5591847389309663,
+        "y": -24.08346367210151,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 357,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0137672671519027,
+        "y": 1.4717594570294321,
+        "z": -1.213718558479628
+      },
+      "LocalRotation": {
+        "x": -0.5526009755942027,
+        "y": -23.8338451321889,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 358,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0146038398887398,
+        "y": 1.4717673595778795,
+        "z": -1.2130578721613265
+      },
+      "LocalRotation": {
+        "x": -0.5463651507265439,
+        "y": -23.588448302484505,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 359,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.015034349545956,
+        "y": 1.4717616192745588,
+        "z": -1.2127390114512584
+      },
+      "LocalRotation": {
+        "x": -0.5409007450140564,
+        "y": -23.336283824534977,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 360,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0156832134565736,
+        "y": 1.471760241987017,
+        "z": -1.2122333151162519
+      },
+      "LocalRotation": {
+        "x": -0.5353426635641512,
+        "y": -23.095749363890647,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 361,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0164113208100185,
+        "y": 1.47176012641044,
+        "z": -1.211656726067639
+      },
+      "LocalRotation": {
+        "x": -0.5298359461348383,
+        "y": -22.862506381710276,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 362,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0170804008768115,
+        "y": 1.471758403998398,
+        "z": -1.2111255084474042
+      },
+      "LocalRotation": {
+        "x": -0.5245079985402157,
+        "y": -22.632424269884034,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 363,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0176385044133498,
+        "y": 1.4717541132179794,
+        "z": -1.2106834191955553
+      },
+      "LocalRotation": {
+        "x": -0.5193960539770899,
+        "y": -22.40397146652168,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 364,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0181083530590356,
+        "y": 1.471748798300671,
+        "z": -1.2103104697740585
+      },
+      "LocalRotation": {
+        "x": -0.5144225684056636,
+        "y": -22.17776051057697,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 365,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0184752241089965,
+        "y": 1.4717427706611381,
+        "z": -1.2100187035258283
+      },
+      "LocalRotation": {
+        "x": -0.5095681095608597,
+        "y": -21.953344879284337,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 366,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0187206085936649,
+        "y": 1.4717362068747066,
+        "z": -1.2098230151711875
+      },
+      "LocalRotation": {
+        "x": -0.5048201105452534,
+        "y": -21.730200867997933,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 367,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0188281450028303,
+        "y": 1.4717294520658775,
+        "z": -1.209736740380294
+      },
+      "LocalRotation": {
+        "x": -0.5001587183518836,
+        "y": -21.507879608418143,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 368,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.018871096830352,
+        "y": 1.4717229075422087,
+        "z": -1.2096968779505923
+      },
+      "LocalRotation": {
+        "x": -0.49556908854005144,
+        "y": -21.28822223715931,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 369,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0190795933495438,
+        "y": 1.471716688880278,
+        "z": -1.2095069055410708
+      },
+      "LocalRotation": {
+        "x": -0.49106175206142666,
+        "y": -21.076907105547516,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 370,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0197859811238115,
+        "y": 1.471719194644675,
+        "z": -1.2088584651138712
+      },
+      "LocalRotation": {
+        "x": -0.4862896788209241,
+        "y": -20.88189104067606,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 371,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.024835642853078,
+        "y": 1.4716489096388305,
+        "z": -1.2044060111199122
+      },
+      "LocalRotation": {
+        "x": -0.48518033365975555,
+        "y": -20.793081335233463,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 372,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.039627725719616,
+        "y": 1.4732474412481693,
+        "z": -1.1888303082422582
+      },
+      "LocalRotation": {
+        "x": -0.411697959137868,
+        "y": -20.97021936878615,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 373,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0578126439878566,
+        "y": 1.4746859570867512,
+        "z": -1.1692800685092668
+      },
+      "LocalRotation": {
+        "x": -0.3463666547948634,
+        "y": -21.233383012352625,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 374,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.0775825749139207,
+        "y": 1.4759803441182135,
+        "z": -1.1472148906940858
+      },
+      "LocalRotation": {
+        "x": -0.28811833766965833,
+        "y": -21.53948677987102,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 375,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.096977714917322,
+        "y": 1.4771751091165775,
+        "z": -1.1244139370774757
+      },
+      "LocalRotation": {
+        "x": -0.23474910814381644,
+        "y": -21.842744864180162,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 376,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.113949301135207,
+        "y": 1.4783011731502933,
+        "z": -1.1032194286358838
+      },
+      "LocalRotation": {
+        "x": -0.18472616600860192,
+        "y": -22.09175057029902,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 377,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.1278922297635794,
+        "y": 1.4793542597254914,
+        "z": -1.0846968582139733
+      },
+      "LocalRotation": {
+        "x": -0.1381919185993894,
+        "y": -22.268822061591532,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 378,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.1396198992375768,
+        "y": 1.4803082003788792,
+        "z": -1.068260458849039
+      },
+      "LocalRotation": {
+        "x": -0.0963035294579555,
+        "y": -22.39224299960766,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 379,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.149153151324828,
+        "y": 1.4811572950984149,
+        "z": -1.0541193726624216
+      },
+      "LocalRotation": {
+        "x": -0.059285058614761965,
+        "y": -22.461345253434892,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 380,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.15642463296297,
+        "y": 1.4818998521319535,
+        "z": -1.0425534424168024
+      },
+      "LocalRotation": {
+        "x": -0.027182046919293157,
+        "y": -22.47361463516707,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    },
+    {
+      "Frame": 381,
+      "FocusedName": "Fropp",
+      "LocalPosition": {
+        "x": 1.15642463296297,
+        "y": 1.4818998521319535,
+        "z": -1.0425534424168024
+      },
+      "LocalRotation": {
+        "x": -0.0269376102000507,
+        "y": -22.26063774209702,
+        "z": 0
+      },
+      "ModelWorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "ModelWorldRotation": {
+        "x": 0.0,
+        "y": 41.36733,
+        "z": 0.0
+      }
+    }
+  ]
+}

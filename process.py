@@ -104,7 +104,8 @@ def plt_torus(ax, torus, event_1=None, event_2=None, points=None, cameras=None, 
 
 
 def calculate_point_projection(R, r, thetas, phis, focus_points, focus_frames, focus_speed, focus_seq,
-                               sample=10, scales=None, rotates=None, dist_offset=None, speed=0, action_consis=True):
+                               sample=10, scales=None, rotates=None, dist_offset=None, speed=0, action_consis=True,
+                               is_moving=False):
     thetas_seq = np.zeros((sample))
     phis_seq = np.zeros((sample))
 
@@ -161,8 +162,11 @@ def calculate_point_projection(R, r, thetas, phis, focus_points, focus_frames, f
         focus = focus_seq[i].reshape((3,))
         diff = point - focus
         # point2focus_dist = np.linalg.norm(point - focus)
-        point = focus + diff * dist_adj_ratio
-        # point2focus_dist_adj = np.linalg.norm(point - focus)
+        if is_moving:
+            point = focus + diff * dist_adj_ratio
+        else:
+            point = focus + diff * dist_adj_ratio
+            # point2focus_dist_adj = np.linalg.norm(point - focus)
         points.append(point)
 
     return points
@@ -185,9 +189,9 @@ def camera_line_simulation(e1_pos_env, e2_pos_env, e1_pos_unit, e2_pos_unit, cam
 
     if given_focus is not None:
         focus = np.zeros((given_focus.shape))
-        focus[:, 0] = given_focus[:, 0] + focus_center_x[:] * (1-intensity)
-        focus[:, 1] = given_focus[:, 1] + focus_center_y[:] * (1-intensity)
-        focus[:, 2] = given_focus[:, 2]
+        focus[:, 0] = given_focus[:, 0] + focus_center_x[:]  # * theta_ratio
+        focus[:, 1] = given_focus[:, 1] + focus_center_y[:]  # * theta_ratio
+        focus[:, 2] = given_focus[:, 2]  # + focus_center_x[:]
         focus = focus.tolist()
 
     else:
@@ -231,11 +235,11 @@ def get_dist_adj_ratio(point, focus, speed):
     point2focus_dist = np.linalg.norm(point - focus)
 
     if speed < 0.04:
-        dis_ratio = 1.3 / point2focus_dist
+        dis_ratio = 1.5 / point2focus_dist
     elif speed > 0.08:
-        dis_ratio = 3 / point2focus_dist
+        dis_ratio = 3.5 / point2focus_dist
     else:
-        dis_ratio = (1 + 2 * speed / 0.08) / point2focus_dist
+        dis_ratio = (1.5 + 2 * speed / 0.08) / point2focus_dist
 
     return dis_ratio
 
