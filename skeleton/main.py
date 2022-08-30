@@ -1,5 +1,6 @@
 import math
 import os
+import shutil
 
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
@@ -9,7 +10,7 @@ from scipy.spatial.transform import Rotation
 from camera.output_cameras import output_cameras_track
 from general.save_load import LoadBasic, SaveBasic
 from process import generate_spindle_torus, generate_event, \
-    scale_torus, calculate_point_projection, camera_line_simulation
+    scale_torus, calculate_point_projection, camera_line_simulation, plt_torus
 from skeleton.analysis_support import get_all_focus_imp, map_skeleton_sequence_diff
 from skeleton.trend_analysis import process_action, get_focus_max_change
 from utils.line import line_vector, rotation
@@ -88,7 +89,7 @@ class AnimatedScatter(object):
     """An animated scatter plot using matplotlib.animations.FuncAnimation."""
 
     def __init__(self, path='local_data/skeleton', fn='test_data.json', target_fn='test_data.json',
-                 intensity=0.2, is_moving=False, play_animation=False):
+                 intensity=0.2, is_moving=False, play_animation=True):
         self.path = path
         self.fn = fn
         self.stream = self.data_stream()
@@ -306,7 +307,7 @@ class AnimatedScatter(object):
         self.cameras_points = points
         self.focus = focus
         self.cameras_rotation = angles
-        # plt_torus(self.ax, torus, event_1=event_1, event_2=event_2, focus=focus, points=points, cameras=direct_vectors)
+        plt_torus(self.ax, torus, event_1=event_1, event_2=event_2, focus=focus, points=points, cameras=direct_vectors)
 
 
 def get_moving_max(centroid_start, skeleton_sequence, centroid=False):
@@ -479,7 +480,43 @@ def get_target_focus_point(path='local_data/skeleton', fn='test_data.json', use_
     return focus_point
 
 
+def generate_all_camera_tracks(path):
+    action_raw = os.listdir(os.path.join(path, "action_raw"))
+
+    for action in action_raw:
+        action_raw_src = os.path.join(path, "action_raw", action)
+        action_raw_dst = 'local_data/skeleton/actor_data.json'
+        shutil.copyfile(action_raw_src, action_raw_dst)
+        output_path = os.path.join(path, "action2camera_tracks", action.split('.')[0])
+        if not os.path.exists(output_path):
+            os.makedirs(output_path)
+
+        for intensity in [1, 0.6, 0.2]:
+            for obj_dist in [2, 4, 8]:
+                try:
+                    print("processing intensity{} distance{}".format(str(intensity), str(obj_dist)))
+                    a = AnimatedScatter(path='local_data/skeleton', fn='actor_data.json',
+                                        target_fn='dis_{}.json'.format(obj_dist), intensity=intensity,
+                                        play_animation=False)
+                    camera_track_src = os.path.join('local_data/skeleton/camera_output',
+                                                    "camera_{}_int_{}.json".format(math.ceil(obj_dist), intensity))
+
+                    camera_track_dst = os.path.join(output_path,
+                                                    "camera_{}_int_{}.json".format(math.ceil(obj_dist), intensity))
+
+                    shutil.copyfile(camera_track_src, camera_track_dst)
+                except:
+
+                    pass
+
+    return
+
+
 if __name__ == '__main__':
+    data_root = "../GGCamera_data/"
+
+    # generate_all_camera_tracks(data_root)
+
     for intensity in [1, 0.6, 0.2]:
         for obj_dist in [2, 4, 8]:
             print("processing intensity{} distance{}".format(str(intensity), str(obj_dist)))

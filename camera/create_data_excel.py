@@ -1,6 +1,6 @@
 import pandas as pd
 
-from general.save_load import LoadBasic
+from general.save_load import LoadBasic, SaveBasic
 
 scenes = ['']
 actors = ['man', 'woman']
@@ -11,6 +11,30 @@ actions = ['stand_front_push_4', 'run_front_jump_1', 'stand_front_jump_5', 'inte
 diss = ['2', '4', '8']
 directions = ['0']
 intensitys = ['0.2', '0.6', '1.0']
+
+position = {
+    "Name": "ModelPosition",
+    "LocalPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+    },
+    "LocalRotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+    },
+    "WorldPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+    },
+    "WorldRotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+    }
+}
 
 
 def create_data_set_csv(output_path):
@@ -37,7 +61,7 @@ def create_data_set_csv(output_path):
 
 
 def get_action_names():
-    files = ['20220829014832.json', '20220829014659.json', '20220829014536.json', '20220829014414.json']
+    files = ['20220829014414.json', '20220829014832.json', '20220829014659.json', '20220829014536.json']
 
     act_names = []
     for file in files:
@@ -50,7 +74,34 @@ def get_action_names():
     return act_names
 
 
+def adjust_data(data):
+    for frame in range(len(data)):
+        data[frame]['Skeleton'].append(position)
+        for skeleton_point in data[frame]['Skeleton']:
+            skeleton_point['WorldPosition'] = skeleton_point['LocalPosition']
+            skeleton_point['WorldRotation'] = skeleton_point['LocalRotation']
+    return 0
+
+
+def split_write_action_json(output_path):
+    files = ['20220829014414.json', '20220829014832.json', '20220829014659.json', '20220829014536.json']
+
+    act_names = []
+    for file in files:
+        data = LoadBasic.load_json("actions", fn=file)
+        for ele in data:
+            act_name = ele['ActionName']
+            act_data = ele['ActionData']
+            adjust_data(act_data)
+
+            SaveBasic.save_json(data=act_data, path=output_path,
+                                fn="{}.json".format(act_name))
+
+
 if __name__ == '__main__':
-    actions = get_action_names()
-    output_path = 'data_set.csv'
-    create_data_set_csv(output_path)
+    # actions = get_action_names()
+    # output_path = 'data_set.csv'
+    # create_data_set_csv(output_path)
+
+    root_path = "../../GGCamera_data/action_raw"
+    split_write_action_json(root_path)
