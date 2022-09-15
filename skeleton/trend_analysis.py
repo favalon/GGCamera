@@ -1,13 +1,11 @@
-import math
-import matplotlib.animation as animation
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
-import os
 from scipy.signal import find_peaks
 
 from general.save_load import LoadBasic, SaveBasic
 from skeleton.analysis_support import important_point_selection
-from utils.line import line_vector, rotation
 
 
 def get_moving_max(centroid_start, skeleton_sequence):
@@ -129,6 +127,7 @@ def get_single_acceleration(skeleton_sequence, names=None, axis='x', act_name=''
         for i in selected_index:
             point_name = names[i]
             point_position = skeleton_sequence[:, i]
+            x = np.diff([i for i in range(len(skeleton_sequence))])
             point_speed = np.diff(point_position) / np.diff([i for i in range(len(skeleton_sequence))])
             point_max = np.max(point_speed)
             peaks, _ = find_peaks(point_speed, distance=30, height=(0.5 * point_max, point_max + 0.01))
