@@ -414,7 +414,6 @@ def decompose_action(path='local_data/skeleton', fn='test_data.json', use_centro
 
         skeleton_sequence_neck = get_skeleton_array(skeleton_sequence, centroid='Bip001Neck')
         skeleton_sequence_bot = get_skeleton_array(skeleton_sequence, centroid='Bip001Spine2')
-
         skeleton_sequence = get_skeleton_array(skeleton_sequence, centroid=point_name)
 
         # get focus side and direction
