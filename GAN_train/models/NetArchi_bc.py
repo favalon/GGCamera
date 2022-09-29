@@ -97,77 +97,74 @@ class TrajDecoder(BaseModel):
         self.actionbranch2 = basic_linear(256, 256)
         self.actionbranch3 = basic_linear(256, 512)
 
-        self.inicambranch1 = basic_linear(incamfeat, 64)
-        self.inicambranch2 = basic_linear(128, 128)
+        self.inicambranch = basic_linear(incamfeat, 64)
+        # self.inicambranch2 = basic_linear(128, 128)
 
         self.emobranch = basic_linear(128, 128)
+        self.thetabranch = basic_linear(128, 128)
+        self.iniposbranch = basic_linear(6, 256)
 
-        self.aes_scorebranch = basic_linear(128, 128)
-        self.iniposbranch = basic_linear(6, 128)
+        self.sum_pa_branch = basic_linear(256, 512)
 
         self.rnn1 = nn.GRU(bidirectional=False, hidden_size=512, input_size=512, num_layers=1, batch_first=True)
         self.h0 = nn.Parameter(torch.randn(1, batch, 512).type(T.FloatTensor), requires_grad=True)
 
         self.dropout = nn.Dropout(p=0.2)
+        self.sum_g_c_branch = basic_linear(512, 192)
 
-        self.outbranch1 = basic_linear(512, 128)
+        self.outbranch = basic_linear(512, 128)
 
         self.meanpool = nn.AvgPool1d(2, stride=2)
 
-        self.outbranch2 = basic_linear(64, 64)
+        self.outbranch2 = basic_linear(128, 64)
 
         self.fc = nn.Linear(64, incamfeat)
 
-    def forward(self, action, act_v, salmask, salfeat, inipos, aes_score, emoint, inicam):
+    def forward(self, action, act_v, salmask, salfeat, inipos, initheta, emoint, inicam):
         # action(B,N,6,30), salfeat(B,N,6,64),
-        # iniposB, N, 2, 3) aes_score(n, N, 1) emoint(B,N,1),inicam(B,N,6)
+        # inipos(B, N, 2, 3) aes_score(B, N, 1) emoint(B,N,1),inicam(B,N,6)
 
         action = self.actionbranch1(action)
         act_v = self.actmove(act_v)
-        action = action + act_v
+        action = action + act_v  # [B, N, 6, 64]
 
         action = action * salmask
-        action = action.reshape((action.shape[0], action.shape[1], action.shape[2] * action.shape[3]))
-        action = self.maxpool(action)
+        action = action.reshape((action.shape[0], action.shape[1], action.shape[2] * action.shape[3]))  # [B, N, 384]
+        action = self.maxpool(action)  # [B, N, 192]
 
-        inicam_1 = self.inicambranch1(inicam)
-        action = torch.cat((action, inicam_1), dim=2)
-        action = self.actionbranch2(action)
+        inicam = self.inicambranch(inicam)  # [B, N, 64]
 
-        inicam_2 = self.inicambranch2(
-            torch.cat((inicam_1, torch.randn(action.shape[0], action.shape[1], 64).type_as(inicam_1)), dim=2))
-        emofeat = torch.cat(
-            (emoint.repeat((1, 1, 64)), torch.randn(action.shape[0], action.shape[1], 64).type_as(emoint)), dim=2)
-        emofeat = self.emobranch(emofeat)
+        initheta = torch.cat(  # [B, N, 128]
+            (initheta.repeat((1, 1, 64)), torch.randn(action.shape[0], action.shape[1], 64).type_as(initheta)), dim=2)
+        initheta = self.thetabranch(initheta)  # [B, N, 128]
+        initheta = self.maxpool(initheta)  # [B, N, 64]
 
-        scorefeat = torch.cat(
-            (emoint.repeat((1, 1, 64)), torch.randn(action.shape[0], action.shape[1], 64).type_as(aes_score)), dim=2)
-        scorefeate = self.aes_scorebranch(scorefeat)
+        ini_set = torch.cat((inicam, initheta), dim=2)  # [B, N, 64]
+        ini_set = self.maxpool(ini_set)
+        action = torch.cat((action, ini_set), dim=2)  # [B, N, 256]
 
-        inipos = self.iniposbranch(
-            inipos.reshape((inipos.shape[0], inipos.shape[1], inipos.shape[2] * inipos.shape[3])))
+        inipos = inipos.reshape((inipos.shape[0], inipos.shape[1], inipos.shape[2] * inipos.shape[3]))
+        inipos = self.iniposbranch(inipos)  # [B, N, 256]
 
-        action = action + torch.cat((inicam_2, emofeat), dim=2)
+        # P + A
+        action = action + inipos  # [B, N, 256]
+        action = self.sum_pa_branch(action)   # [B, N, 512]
+        action = action + salfeat   # [B, N, 512]
 
-        action = self.actionbranch3(action)
-        action = action + salfeat
+        # E1
+        action = action * emoint   # [B, N, 512]
+        out, h1 = self.rnn1(action, self.h0)  # [B, N, 512]
+        out = self.dropout(out)  # [B, N, 512]
+        out = self.sum_g_c_branch(out)  # [B, N, 192]
+        out = torch.cat((out, inicam), dim=2)  # [B, N, 256]
+        out = torch.cat((out, inipos), dim=2)  # [B, N, 512]
+        out = out * emoint  # [B, N, 512]
+        out = self.outbranch(out)  # [B, N, 128]
+        out = self.meanpool(out)  # [B, N, 64]
+        out = torch.cat((out, inicam), dim=2)  # [B, N, 128]
+        out = self.outbranch2(out)  # [B, N, 64]
+        out = self.fc(out)  # [B, N, 6]
 
-        action = action * emoint
-
-        out, h1 = self.rnn1(action, self.h0)
-
-        out = self.dropout(out)
-
-        out = out * emoint
-
-        out = self.outbranch1(out)
-        out = out + inicam_2
-        out = self.meanpool(out)
-        out = out * emoint
-
-        out = self.outbranch2(out)
-        out = out + inicam_1
-        out = self.fc(out)
 
         return out.contiguous()
 

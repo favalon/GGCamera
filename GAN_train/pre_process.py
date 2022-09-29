@@ -126,11 +126,14 @@ def pre_process_single_action_data(action_data, camera_data, action_name="defaul
     skeleton_data_speed = np.concatenate((body_region_pos[2, :, :, :], topo_speed), axis=2)
 
     skeleton_data = np.stack((skeleton_data_ori, skeleton_data_diff, skeleton_data_speed))
-    # 5. camera initial + different
+    # 5. camera initial theta (frames, theta)
     camera_data = format_camera_data(camera_data["data"])
 
-    # 6. intensity
-    # 7. target distance
+    # 6. intensity (frames, intensity)
+    # 7. target distance (frames distance)
+    # 8. target and actor position shape(frame, 2, (x, y, z))
+
+
     return skeleton_data, camera_data
 
 
