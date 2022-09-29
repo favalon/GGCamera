@@ -3,7 +3,43 @@ import copy
 import torch
 import torch.nn as nn
 from torchvision import models
+
 from GAN_train.utils.metrics import Charbonnier
+
+
+def cal_aes_loss(x, y):
+    x = x.reshape((x.shape[0], x.shape[1], 1))
+    weight = torch.ones(x.shape[0], x.shape[1], x.shape[2]).type_as(x)
+    weight[:, :10, :] = 2
+    weight[:, -10:, :] = 2
+    eps = 1e-6
+    loss = torch.sqrt((x - y) ** 2 + eps)
+    loss = loss * weight
+    loss = loss.mean()
+    return loss
+
+
+def cal_direct_loss(x, y):
+    eps = 1e-6
+    signx = torch.sign(x)
+    signy = torch.sign(y)
+    weight = torch.abs(signy - signx)
+    weight = weight + 1
+    loss = torch.sqrt((x - y) ** 2 + eps)
+    loss = loss * weight
+    loss = loss.mean()
+    return loss
+
+
+def cal_general_mse_loss(x, y):
+    weight = torch.ones(x.shape[0], x.shape[1], x.shape[2]).type_as(x)
+    weight[:, :10, :] = 2
+    weight[:, -10:, :] = 2
+    eps = 1e-6
+    loss = torch.sqrt((x - y) ** 2 + eps)
+    loss = loss * weight
+    loss = loss.mean()
+    return loss
 
 
 def MSELossWT(x, y):
@@ -87,7 +123,7 @@ def CharbTV(x):
 def create_vgg_model(end_layers=[8, 15], path=None, gpu=False):
     vgg16 = models.vgg16(pretrained=False)
 
-    vgg16.load_state_dict(torch.load("GAN_train/pre_train_models/vgg16-397923af.pth"))
+    vgg16.load_state_dict(torch.load("pre_train_models/vgg16-397923af.pth"))
 
     vgg16 = vgg16.features
 

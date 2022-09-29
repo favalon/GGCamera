@@ -1,13 +1,14 @@
 from os import makedirs
 from os.path import exists
-import torch
+
 import numpy as np
+import torch
 from torch.nn import MSELoss
 
-from mufpt.loggers import console_logger, file_logger
-from mufpt.lr_schedulers import lr_dummy_scheduler, lr_step_epoch_scheduler
 from models.GAN import Discriminator
 from models.NetArchi_bc import Generator
+from mufpt.loggers import console_logger, file_logger
+from mufpt.lr_schedulers import lr_dummy_scheduler, lr_step_epoch_scheduler
 from train_detail import train_gan_loss
 
 
@@ -104,7 +105,7 @@ if __name__ == '__main__':
     train_label = torch.rand((1000, 45, 8))
 
     in_shape = train_actions.shape[-1]
-    out_shape = train_label.shape[-1] - 2  # 这里其实是6
+    out_shape = 6  # 6 + 1 (camera pos + aes score)
 
     print("Training Network Input Shape : {}, Output Shape : {}".format(in_shape, out_shape))
 
@@ -119,8 +120,8 @@ if __name__ == '__main__':
     D = Discriminator()
 
     lamb_char = 10
-    lamb_gan = 0.3
-    lamb_feat = 0.25
+    lamb_gan = 3
+    lamb_feat = 2
 
     lambs = [lamb_char, lamb_feat, lamb_gan]
 

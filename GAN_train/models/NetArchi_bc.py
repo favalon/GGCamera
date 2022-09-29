@@ -2,6 +2,7 @@ from __future__ import division
 
 import torch
 import torch.nn as nn
+
 from mufpt.base_model import BaseModel
 
 T = torch
@@ -88,7 +89,7 @@ class SalEncoder(BaseModel):
 
 class TrajDecoder(BaseModel):
 
-    def __init__(self, batch, inactfeat, incamfeat):
+    def __init__(self, batch, inactfeat, incamfeat, aes_shape=1):
         super(TrajDecoder, self).__init__()
 
         self.actionbranch1 = basic_linear(inactfeat, 64)
@@ -118,11 +119,11 @@ class TrajDecoder(BaseModel):
 
         self.outbranch2 = basic_linear(128, 64)
 
-        self.fc = nn.Linear(64, incamfeat)
+        self.fc = nn.Linear(64, incamfeat + 1)
 
     def forward(self, action, act_v, salmask, salfeat, inipos, initheta, emoint, inicam):
         # action(B,N,6,30), salfeat(B,N,6,64),
-        # inipos(B, N, 2, 3) aes_score(B, N, 1) emoint(B,N,1),inicam(B,N,6)
+        # inipos(B, N, 2, 3) initheta(B, N, 1) emoint(B,N,1),inicam(B,N,6)
 
         action = self.actionbranch1(action)
         act_v = self.actmove(act_v)
@@ -148,11 +149,11 @@ class TrajDecoder(BaseModel):
 
         # P + A
         action = action + inipos  # [B, N, 256]
-        action = self.sum_pa_branch(action)   # [B, N, 512]
-        action = action + salfeat   # [B, N, 512]
+        action = self.sum_pa_branch(action)  # [B, N, 512]
+        action = action + salfeat  # [B, N, 512]
 
         # E1
-        action = action * emoint   # [B, N, 512]
+        action = action * emoint  # [B, N, 512]
         out, h1 = self.rnn1(action, self.h0)  # [B, N, 512]
         out = self.dropout(out)  # [B, N, 512]
         out = self.sum_g_c_branch(out)  # [B, N, 192]
@@ -165,7 +166,6 @@ class TrajDecoder(BaseModel):
         out = self.outbranch2(out)  # [B, N, 64]
         out = self.fc(out)  # [B, N, 6]
 
-
         return out.contiguous()
 
 
@@ -176,9 +176,9 @@ class Generator(BaseModel):
         self.sal_encoder = SalEncoder(in_shape)
         self.tj_decoder = TrajDecoder(batch, in_shape, out_shape)
 
-    def forward(self, act_diff, action, act_v, inipos, aes_score, emoint, inicam):
+    def forward(self, act_diff, action, act_v, inipos, initheta, emoint, inicam):
         outmask, outfeat = self.sal_encoder(act_diff)
-        output = self.tj_decoder(action, act_v, outmask, outfeat, inipos, aes_score, emoint, inicam)
+        output = self.tj_decoder(action, act_v, outmask, outfeat, inipos, initheta, emoint, inicam)
         return output
 
 

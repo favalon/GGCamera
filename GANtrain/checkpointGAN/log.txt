@@ -1,0 +1,122 @@
+10732	Train Epoch: 1 [10/1000 (1%)]	Loss D step: 1.571670	Loss D train: 1.571670	Loss G step: 45.130337	Loss G train: 45.130337
+
+10732	Train Epoch: 1 [20/1000 (2%)]	Loss D step: 1.400669	Loss D train: 1.486170	Loss G step: 38.386528	Loss G train: 41.758430
+
+10732	Train Epoch: 1 [30/1000 (3%)]	Loss D step: 1.287539	Loss D train: 1.419960	Loss G step: 35.672733	Loss G train: 39.729866
+
+10732	Train Epoch: 1 [40/1000 (4%)]	Loss D step: 1.267913	Loss D train: 1.381948	Loss G step: 33.744064	Loss G train: 38.233414
+
+10732	Train Epoch: 1 [50/1000 (5%)]	Loss D step: 1.225816	Loss D train: 1.350721	Loss G step: 33.207699	Loss G train: 37.228271
+
+10732	Train Epoch: 1 [60/1000 (6%)]	Loss D step: 1.208943	Loss D train: 1.327092	Loss G step: 32.188370	Loss G train: 36.388290
+
+10732	Train Epoch: 1 [70/1000 (7%)]	Loss D step: 1.101974	Loss D train: 1.294932	Loss G step: 31.808512	Loss G train: 35.734035
+
+10732	Train Epoch: 1 [80/1000 (8%)]	Loss D step: 1.158942	Loss D train: 1.277933	Loss G step: 31.343643	Loss G train: 35.185234
+
+10732	Train Epoch: 1 [90/1000 (9%)]	Loss D step: 1.177089	Loss D train: 1.266728	Loss G step: 30.419781	Loss G train: 34.655739
+
+10732	Train Epoch: 1 [100/1000 (10%)]	Loss D step: 1.241547	Loss D train: 1.264210	Loss G step: 29.655125	Loss G train: 34.155678
+
+10732	Train Epoch: 1 [110/1000 (11%)]	Loss D step: 1.324475	Loss D train: 1.269689	Loss G step: 29.668756	Loss G train: 33.747776
+
+10732	Train Epoch: 1 [120/1000 (12%)]	Loss D step: 1.373814	Loss D train: 1.278366	Loss G step: 29.544138	Loss G train: 33.397472
+
+10732	Train Epoch: 1 [130/1000 (13%)]	Loss D step: 1.338468	Loss D train: 1.282989	Loss G step: 29.465023	Loss G train: 33.094978
+
+10732	Train Epoch: 1 [140/1000 (14%)]	Loss D step: 1.421832	Loss D train: 1.292907	Loss G step: 28.655111	Loss G train: 32.777843
+
+10732	Train Epoch: 1 [150/1000 (15%)]	Loss D step: 1.458302	Loss D train: 1.303933	Loss G step: 27.748528	Loss G train: 32.442558
+
+10732	Train Epoch: 1 [160/1000 (16%)]	Loss D step: 1.421015	Loss D train: 1.311251	Loss G step: 28.156391	Loss G train: 32.174671
+
+10732	Train Epoch: 1 [170/1000 (17%)]	Loss D step: 1.367767	Loss D train: 1.314575	Loss G step: 28.504238	Loss G train: 31.958761
+
+10732	Train Epoch: 1 [180/1000 (18%)]	Loss D step: 1.422500	Loss D train: 1.320571	Loss G step: 27.542332	Loss G train: 31.713406
+
+10732	Train Epoch: 1 [190/1000 (19%)]	Loss D step: 1.323561	Loss D train: 1.320728	Loss G step: 27.483408	Loss G train: 31.490774
+
+10732	Train Epoch: 1 [200/1000 (20%)]	Loss D step: 1.270560	Loss D train: 1.318220	Loss G step: 27.871033	Loss G train: 31.309788
+
+10732	Train Epoch: 1 [210/1000 (21%)]	Loss D step: 1.367816	Loss D train: 1.320582	Loss G step: 26.959454	Loss G train: 31.102631
+
+10732	Train Epoch: 1 [220/1000 (22%)]	Loss D step: 1.344861	Loss D train: 1.321685	Loss G step: 27.430311	Loss G train: 30.935705
+
+10732	Train Epoch: 1 [230/1000 (23%)]	Loss D step: 1.443472	Loss D train: 1.326980	Loss G step: 27.328335	Loss G train: 30.778862
+
+10732	Train Epoch: 1 [240/1000 (24%)]	Loss D step: 1.479564	Loss D train: 1.333338	Loss G step: 27.647617	Loss G train: 30.648396
+
+10732	Train Epoch: 1 [250/1000 (25%)]	Loss D step: 1.502139	Loss D train: 1.340090	Loss G step: 27.662325	Loss G train: 30.528952
+
+10732	Train Epoch: 1 [260/1000 (26%)]	Loss D step: 1.555925	Loss D train: 1.348391	Loss G step: 27.238762	Loss G train: 30.402409
+
+10732	Train Epoch: 1 [270/1000 (27%)]	Loss D step: 1.585521	Loss D train: 1.357174	Loss G step: 26.574511	Loss G train: 30.260633
+
+10732	Train Epoch: 1 [280/1000 (28%)]	Loss D step: 1.599577	Loss D train: 1.365831	Loss G step: 27.604534	Loss G train: 30.165775
+
+10732	Train Epoch: 1 [290/1000 (29%)]	Loss D step: 1.664766	Loss D train: 1.376139	Loss G step: 27.197428	Loss G train: 30.063417
+
+10732	Train Epoch: 1 [300/1000 (30%)]	Loss D step: 1.725716	Loss D train: 1.387792	Loss G step: 27.673527	Loss G train: 29.983755
+
+10732	Train Epoch: 1 [310/1000 (31%)]	Loss D step: 1.703811	Loss D train: 1.397986	Loss G step: 27.727928	Loss G train: 29.910984
+
+10732	Train Epoch: 1 [320/1000 (32%)]	Loss D step: 1.689832	Loss D train: 1.407106	Loss G step: 27.926685	Loss G train: 29.848976
+
+10732	Train Epoch: 1 [330/1000 (33%)]	Loss D step: 1.717983	Loss D train: 1.416527	Loss G step: 27.742392	Loss G train: 29.785141
+
+10732	Train Epoch: 1 [340/1000 (34%)]	Loss D step: 1.689696	Loss D train: 1.424561	Loss G step: 27.513630	Loss G train: 29.718330
+
+10732	Train Epoch: 1 [350/1000 (35%)]	Loss D step: 1.668041	Loss D train: 1.431518	Loss G step: 27.982288	Loss G train: 29.668730
+
+10732	Train Epoch: 1 [360/1000 (36%)]	Loss D step: 1.620910	Loss D train: 1.436779	Loss G step: 27.419073	Loss G train: 29.606239
+
+10732	Train Epoch: 1 [370/1000 (37%)]	Loss D step: 1.635725	Loss D train: 1.442155	Loss G step: 27.195972	Loss G train: 29.541096
+
+10732	Train Epoch: 1 [380/1000 (38%)]	Loss D step: 1.584549	Loss D train: 1.445903	Loss G step: 27.611065	Loss G train: 29.490305
+
+10732	Train Epoch: 1 [390/1000 (39%)]	Loss D step: 1.563791	Loss D train: 1.448925	Loss G step: 26.804308	Loss G train: 29.421434
+
+10732	Train Epoch: 1 [400/1000 (40%)]	Loss D step: 1.570301	Loss D train: 1.451960	Loss G step: 27.914972	Loss G train: 29.383772
+
+10732	Train Epoch: 1 [410/1000 (41%)]	Loss D step: 1.534301	Loss D train: 1.453968	Loss G step: 27.914633	Loss G train: 29.347939
+
+10732	Train Epoch: 1 [420/1000 (42%)]	Loss D step: 1.525920	Loss D train: 1.455681	Loss G step: 26.634609	Loss G train: 29.283337
+
+10732	Train Epoch: 1 [430/1000 (43%)]	Loss D step: 1.488452	Loss D train: 1.456443	Loss G step: 26.936134	Loss G train: 29.228750
+
+10732	Train Epoch: 1 [440/1000 (44%)]	Loss D step: 1.497480	Loss D train: 1.457376	Loss G step: 26.509857	Loss G train: 29.166960
+
+10732	Train Epoch: 1 [450/1000 (45%)]	Loss D step: 1.466946	Loss D train: 1.457589	Loss G step: 27.343628	Loss G train: 29.126442
+
+10732	Train Epoch: 1 [460/1000 (46%)]	Loss D step: 1.457518	Loss D train: 1.457587	Loss G step: 27.112194	Loss G train: 29.082653
+
+10732	Train Epoch: 1 [470/1000 (47%)]	Loss D step: 1.451268	Loss D train: 1.457453	Loss G step: 26.998255	Loss G train: 29.038303
+
+10732	Train Epoch: 1 [480/1000 (48%)]	Loss D step: 1.445344	Loss D train: 1.457201	Loss G step: 26.714283	Loss G train: 28.989887
+
+10732	Train Epoch: 1 [490/1000 (49%)]	Loss D step: 1.434760	Loss D train: 1.456743	Loss G step: 26.934164	Loss G train: 28.947933
+
+10732	Train Epoch: 1 [500/1000 (50%)]	Loss D step: 1.395060	Loss D train: 1.455509	Loss G step: 26.285187	Loss G train: 28.894676
+
+10732	Train Epoch: 1 [510/1000 (51%)]	Loss D step: 1.414621	Loss D train: 1.454707	Loss G step: 26.623531	Loss G train: 28.850147
+
+10732	Train Epoch: 1 [520/1000 (52%)]	Loss D step: 1.381191	Loss D train: 1.453293	Loss G step: 26.671066	Loss G train: 28.808241
+
+10732	Train Epoch: 1 [530/1000 (53%)]	Loss D step: 1.396498	Loss D train: 1.452222	Loss G step: 27.071650	Loss G train: 28.775475
+
+10732	Train Epoch: 1 [540/1000 (54%)]	Loss D step: 1.371375	Loss D train: 1.450725	Loss G step: 26.621342	Loss G train: 28.735582
+
+10732	Train Epoch: 1 [550/1000 (55%)]	Loss D step: 1.368911	Loss D train: 1.449237	Loss G step: 25.798929	Loss G train: 28.682188
+
+10732	Train Epoch: 1 [560/1000 (56%)]	Loss D step: 1.394028	Loss D train: 1.448251	Loss G step: 26.246548	Loss G train: 28.638697
+
+10732	Train Epoch: 1 [570/1000 (57%)]	Loss D step: 1.384596	Loss D train: 1.447135	Loss G step: 25.913319	Loss G train: 28.590883
+
+10732	Train Epoch: 1 [580/1000 (58%)]	Loss D step: 1.396812	Loss D train: 1.446267	Loss G step: 26.260841	Loss G train: 28.550709
+
+10732	Train Epoch: 1 [590/1000 (59%)]	Loss D step: 1.365910	Loss D train: 1.444905	Loss G step: 26.146395	Loss G train: 28.509958
+
+10732	Train Epoch: 1 [600/1000 (60%)]	Loss D step: 1.356886	Loss D train: 1.443438	Loss G step: 25.904768	Loss G train: 28.466539
+
+10732	Train Epoch: 1 [610/1000 (61%)]	Loss D step: 1.355770	Loss D train: 1.442001	Loss G step: 25.902580	Loss G train: 28.424505
+

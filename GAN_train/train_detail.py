@@ -1,11 +1,12 @@
 from os import getpid
 from os.path import join
 from time import time
+
 import numpy as np
-import torch
 import torch.optim as optim
-from general_loss import CharbMSEWT, CharbDirect, CharbTV, create_vgg_model, vggfeature_loss
 from torch.autograd import Variable
+
+from general_loss import *
 
 
 def log(x):
@@ -26,7 +27,7 @@ def train_epoch(epoch, args, D, G, vgg_models, data_loader, D_optimizer, G_optim
     train_loss_g = 0.0
     step_loss_g = 0.0
 
-    train_loss_char = 0.0
+    train_loss_general = 0.0
     train_loss_feat = 0.0
     train_loss_gan = 0.0
 
@@ -62,15 +63,17 @@ def train_epoch(epoch, args, D, G, vgg_models, data_loader, D_optimizer, G_optim
         act_v = torch.from_numpy(np.random.rand(10, 45, 6, 35)).float().cuda()
         cam_real = torch.from_numpy(np.random.rand(10, 45, 6)).float().cuda()
         inipos = torch.from_numpy(np.random.rand(10, 45, 2, 3)).float().cuda()
-        aes_score = torch.from_numpy(np.random.rand(10, 45, 1)).float().cuda()
+        initheta = torch.from_numpy(np.random.rand(10, 45, 1)).float().cuda()
         emoint = torch.from_numpy(np.random.rand(10, 45, 1)).float().cuda()
         inicam = torch.from_numpy(np.random.rand(10, 45, 6)).float().cuda()
 
+        aes_score_real = torch.from_numpy(np.random.rand(10, 45, 1)).float().cuda()
+        cam_real = torch.from_numpy(np.random.rand(10, 45, 7)).float().cuda()
 
         """ Discriminator Pass"""
         # Predict
 
-        cam_fake = G(act_diff, action, act_v, inipos, aes_score, emoint, inicam)
+        cam_fake = G(act_diff, action, act_v, inipos, initheta, emoint, inicam)
         D_real = D(cam_real)
         D_fake = D(cam_fake)
 
@@ -83,27 +86,30 @@ def train_epoch(epoch, args, D, G, vgg_models, data_loader, D_optimizer, G_optim
         """ Generator Pass"""
 
         # Sample from GS
-        cam_fake = G(act_diff, action, act_v, inipos, aes_score, emoint, inicam)
+        cam_fake = G(act_diff, action, act_v, inipos, initheta, emoint, inicam)
         # Eval with D
         D_fake = D(cam_fake)
         loss_gan = -torch.mean(log(D_fake))
 
-        # Char loss
+        # general loss
 
-        fake_offset = cam_fake[:, 1:, :] - cam_fake[:, :-1, :]
-        real_offset = cam_real[:, 1:, :] - cam_real[:, :-1, :]
+        fake_offset = cam_fake[:, 1:, :6] - cam_fake[:, :-1, :6]
+        real_offset = cam_real[:, 1:, :6] - cam_real[:, :-1, :6]
 
-        loss_loc = CharbMKIJSEWT(cam_fake, cam_real)
-        loss_direct = CharbDirect(fake_offset, real_offset)
-        loss_tv = CharbTV(cam_fake)
+        loss_aes = cal_aes_loss(x=cam_fake[:, :, 6], y=aes_score_real)
+        loss_direct = cal_direct_loss(x=fake_offset, y=real_offset)
+        loss_mse = cal_general_mse_loss(x=cam_fake[:, :, :6], y=cam_real[:, :, :6])
 
-        loss_char = loss_loc + loss_direct + loss_tv
+        loss_general = loss_aes + loss_direct + loss_mse
 
         # Feature Loss
         loss_feat = vggfeature_loss(cam_fake, cam_real, vgg_models)
 
         # Combined
-        loss_combined = args.lamb[0] * loss_char + args.lamb[1] * loss_feat + args.lamb[2] * loss_gan
+        loss_combined = args.lamb[0] * loss_general + \
+                        args.lamb[1] * loss_feat + \
+                        args.lamb[2] * loss_gan
+
         loss_combined.backward()
         G_optimizer.step()
         reset_grad()
@@ -114,18 +120,23 @@ def train_epoch(epoch, args, D, G, vgg_models, data_loader, D_optimizer, G_optim
         train_loss_g += loss_combined
         step_loss_g += loss_combined
 
-        train_loss_char += loss_char * args.lamb[0]
+        train_loss_general += loss_general * args.lamb[0]
         train_loss_feat += loss_feat * args.lamb[1]
         train_loss_gan += loss_gan * args.lamb[2]
 
         data_idx += len(Z)
 
         if (batch_idx + 1) % args.log_interval == 0:
-            string_step = '{}\tTrain Epoch: {} [{}/{} ({:.0f}%)]\tLoss D step: {:.6f}\tLoss D train: {:.6f}\tLoss G step: {:.6f}\tLoss G train: {:.6f}\n'.format(
-                pid, epoch, data_idx, len(data_loader.dataset),
-                100. * (batch_idx + 1) / len(data_loader), step_loss_d / float(args.log_interval),
-                train_loss_d / float(batch_idx + 1), step_loss_g / float(args.log_interval),
-                train_loss_g / float(batch_idx + 1))
+            string_step = '{}\t' \
+                          'Train Epoch: {} [{}/{} ({:.0f}%)]\t' \
+                          'Loss D step: {:.6f}\t' \
+                          'Loss D train: {:.6f}\t' \
+                          'Loss G step: {:.6f}\t' \
+                          'Loss G train: {:.6f}\n' \
+                .format(pid, epoch, data_idx, len(data_loader.dataset),
+                        100. * (batch_idx + 1) / len(data_loader), step_loss_d / float(args.log_interval),
+                        train_loss_d / float(batch_idx + 1), step_loss_g / float(args.log_interval),
+                        train_loss_g / float(batch_idx + 1))
 
             for logger in args.loggers:
                 logger(string_step)
@@ -149,7 +160,7 @@ def train_epoch(epoch, args, D, G, vgg_models, data_loader, D_optimizer, G_optim
             for param_group in G_optimizer.param_groups:
                 param_group['lr'] = args.lr_g
 
-    return [train_loss_g / float(len(data_loader)), train_loss_char / float(len(data_loader)),
+    return [train_loss_g / float(len(data_loader)), train_loss_general / float(len(data_loader)),
             train_loss_feat / float(len(data_loader)), train_loss_gan / float(len(data_loader))]
 
 
@@ -190,9 +201,9 @@ def train_gan_loss(G, D, train_data, train_labels, args):
         string_epoch = "#############Epoch {}############" \
                        "Finished epoch in {:.2f} seconds.\n " \
                        "G Train loss: {:.6f}.\n" \
-                       "G char loss: {:.6f}.\n" \
+                       "G general loss: {:.6f}.\n" \
                        "G feat loss: {:.6f}.\n" \
-                       "G gan loss: {:.6f}.\n"\
+                       "G gan loss: {:.6f}.\n" \
             .format(epoch, epoch_time, train_loss[0], train_loss[1], train_loss[2], train_loss[3])
 
         for logger in args.loggers:

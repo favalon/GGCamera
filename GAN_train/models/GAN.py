@@ -2,6 +2,7 @@ from __future__ import division
 
 import torch
 import torch.nn as nn
+
 from mufpt.base_model import BaseModel
 
 T = torch
@@ -14,7 +15,7 @@ class Discriminator(BaseModel):
         super(Discriminator, self).__init__()
 
         self.feat_branch = nn.Sequential(
-            nn.Linear(270, 256),
+            nn.Linear(315, 256),
             nn.LayerNorm(256),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Linear(256, 128),
