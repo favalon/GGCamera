@@ -6,7 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/GAN_train" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/GAN_train/pre_train_models" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.7 (face-nnn)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.7 (GGCamera)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

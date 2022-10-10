@@ -1,18 +1,21 @@
+import copy
+import glob
+import json
 import math
 import os
 import random
-import copy
-from Const import norm_M1, rand5 as rands1
-import torch
+
 import numpy as np
-import glob
+import torch
+
+from Const import norm_M1, rand5 as rands1
 from general.save_load import LoadBasic
 
 body_masks_valid = np.array(
     [[1, 1, 1, 1, 0], [1, 1, 1, 1, 1], [1, 1, 1, 1, 0], [1, 1, 1, 1, 0], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]]).reshape(
     (1, 6, 5))
 
-os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 
 def get_skeleton_array(skeleton_sequence, max_frame=100):
@@ -169,16 +172,23 @@ def enhance_act_feature(act_info):
     return action_data, acts_diff, acts_v
 
 
+class NumpyFloatValuesEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.float32):
+            return float(obj)
+        return json.JSONEncoder.default(self, obj)
+
+
 def format_camera_data(camera_data, max_frame=100):
     camera_data_format = np.zeros((len(camera_data), 2, 3))
     for frame, data in enumerate(camera_data):
-        camera_data_format[frame, 0, 0] = data["LocalPosition"]['x']
-        camera_data_format[frame, 0, 1] = data["LocalPosition"]['y']
-        camera_data_format[frame, 0, 2] = data["LocalPosition"]['z']
+        camera_data_format[frame, 0, 0] = float(data["LocalPosition"]['x'])
+        camera_data_format[frame, 0, 1] = float(data["LocalPosition"]['y'])
+        camera_data_format[frame, 0, 2] = float(data["LocalPosition"]['z'])
 
-        camera_data_format[frame, 1, 0] = data["LocalRotation"]['x']
-        camera_data_format[frame, 1, 1] = data["LocalRotation"]['y']
-        camera_data_format[frame, 1, 2] = data["LocalRotation"]['z']
+        camera_data_format[frame, 1, 0] = float(data["LocalRotation"]['x'])
+        camera_data_format[frame, 1, 1] = float(data["LocalRotation"]['y'])
+        camera_data_format[frame, 1, 2] = float(data["LocalRotation"]['z'])
 
     # camera_data_diff = np.zeros((len(camera_data), 2, 3))
     # camera_data_diff[1:, :, :] = np.diff(camera_data_format, axis=0)
@@ -239,7 +249,7 @@ def pre_process_single_action_data(action_data, camera_data,
     body_region_pos = np.expand_dims(body_region_pos, axis=0)
     body_region_rot = np.expand_dims(body_region_rot, axis=0)
 
-    act_info = np.concatenate((body_region_pos,  body_region_rot), axis=0)
+    act_info = np.concatenate((body_region_pos, body_region_rot), axis=0)
 
     # topo_ori = compute_topo_test(body_region_pos[0, :, :, :, :])
     # topo_diff = compute_topo_test(body_region_pos[1, :, :, :, :])
@@ -307,7 +317,8 @@ def pre_process(path):
 def normalization_data(data):
     data_normalized = np.zeros(data.shape)
     data_normalized[:, :, :, :15] = (data[:, :, :, :15] - np.min(data[:, :, :, :15])) / np.ptp(data[:, :, :, :15])
-    data_normalized[:, :, :, 15:30] = (data[:, :, :, 15:30] - np.min(data[:, :, :, 15:30])) / np.ptp(data[:, :, :, 15:30])
+    data_normalized[:, :, :, 15:30] = (data[:, :, :, 15:30] - np.min(data[:, :, :, 15:30])) / np.ptp(
+        data[:, :, :, 15:30])
     data_normalized[:, :, :, 30:] = (data[:, :, :, 30:] - np.min(data[:, :, :, 30:])) / np.ptp(data[:, :, :, 30:])
     return data_normalized
 
@@ -323,9 +334,9 @@ if __name__ == '__main__':
     act_info_base_contain = np.zeros((all_files_len, 100, 6, 35))
     act_info_diff_contain = np.zeros((all_files_len, 100, 6, 35))
     act_info_v_contain = np.zeros((all_files_len, 100, 6, 35))
-    init_camera_contain = np.zeros((all_files_len, 100,  2, 3))
-    init_theta_contain = np.zeros((all_files_len, 100,  1))
-    emo_intensity_contain = np.zeros((all_files_len, 100,  1))
+    init_camera_contain = np.zeros((all_files_len, 100, 2, 3))
+    init_theta_contain = np.zeros((all_files_len, 100, 1))
+    emo_intensity_contain = np.zeros((all_files_len, 100, 1))
     dis_diff_contain = np.zeros((all_files_len, 100, 1))
     position_contain = np.zeros((all_files_len, 100, 2, 3))
     camera_data_contain = np.zeros((all_files_len, 100, 2, 3))
@@ -336,13 +347,13 @@ if __name__ == '__main__':
         act_name = file.split("\\")[-1].split(".json")[0]
 
         for camera_file in glob.glob(os.path.join(data_root, "action2camera_tracks/{}/*.json".format(act_name))):
-
             print("processing: {}".format(camera_file))
 
             dis = camera_file.split("\\")[-1].split("_")[1]
             intensity = camera_file.split("\\")[-1].split("_")[3].split(".json")[0]
 
-            action = LoadBasic.load_basic(fn="{}.json".format(act_name), path=os.path.join(data_root, "action_raw"), file_type='json')
+            action = LoadBasic.load_basic(fn="{}.json".format(act_name), path=os.path.join(data_root, "action_raw"),
+                                          file_type='json')
             camera = LoadBasic.load_basic(fn="{}/camera_{}_int_{}.json".format(act_name, dis, intensity),
                                           path=os.path.join(data_root, "action2camera_tracks"), file_type='json')
 
@@ -361,7 +372,6 @@ if __name__ == '__main__':
 
             i += 1
             print(i)
-
 
     act_info_base_contain = normalization_data(act_info_base_contain)
     act_info_diff_contain = normalization_data(act_info_diff_contain)
