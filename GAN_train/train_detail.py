@@ -41,34 +41,38 @@ def train_epoch(epoch, args, D, G, vgg_models, data_loader, D_optimizer, G_optim
         else:
             Z, X = Variable(Z.float()), Variable(X.float())
 
-        ####process data
-
+        # process data
         Z = Z.contiguous()
         X = X.contiguous()
 
-        ####contiguous to aviod gap in view
-        # acts_diff = Z[:, :, :, :35]
-        # actions = Z[:, :, :, 35:70]
-        # acts_v = Z[:, :, :, 70:]
-        #
-        # cam_real = X[:, :, :6]
-        # emoint = X[:, :, 6:7]
-        # inicam = X[:, 0:1, :6]
-        #
-        # inicam = inicam.repeat((1, cam_real.shape[1], 1))
+        if batch_idx == 42:
+            print("")
+
+        # contiguous to aviod gap in view
+        # init_camera_is = [0:6]
+        # init_theta_s = [6]
+        # emo_intensity_is = [7]
+        # dis_diff_is = [8]
+        # position_is = [9:15]
+        # camera_data_is = [15:21]
 
         # fake input test
-        act_diff = torch.from_numpy(np.random.rand(10, 45, 6, 35)).float().cuda()
-        action = torch.from_numpy(np.random.rand(10, 45, 6, 35)).float().cuda()
-        act_v = torch.from_numpy(np.random.rand(10, 45, 6, 35)).float().cuda()
-        cam_real = torch.from_numpy(np.random.rand(10, 45, 6)).float().cuda()
-        inipos = torch.from_numpy(np.random.rand(10, 45, 2, 3)).float().cuda()
-        initheta = torch.from_numpy(np.random.rand(10, 45, 1)).float().cuda()
-        emoint = torch.from_numpy(np.random.rand(10, 45, 1)).float().cuda()
-        inicam = torch.from_numpy(np.random.rand(10, 45, 6)).float().cuda()
+        act_diff = Z[:, :, :, :35]
+        action = Z[:, :, :, 35:70]
+        act_v = Z[:, :, :, 70:]
+        inicam = X[:, :, 0:6]
+        initheta = X[:, :, 6:7]
+        emoint = X[:, :, 7:8]
+        inipos = X[:, :, 9:15]
+        cam_real = X[:, :, 15:21]
 
-        aes_score_real = torch.from_numpy(np.random.rand(10, 45, 1)).float().cuda()
-        cam_real = torch.from_numpy(np.random.rand(10, 45, 7)).float().cuda()
+        # act_v = torch.from_numpy(np.zeros(act_v.shape)).float().cuda()
+        # initheta = torch.from_numpy(np.zeros(initheta.shape)).float().cuda()
+        # inipos = torch.from_numpy(np.zeros(inipos.shape)).float().cuda()
+
+        aes_score_real = torch.from_numpy(np.zeros((cam_real.shape[0], 100, 1))).float().cuda()
+        cam_real = torch.cat((cam_real, aes_score_real), 2)
+        # cam_real = torch.from_numpy(np.random.rand(10, 45, 7)).float().cuda()
 
         """ Discriminator Pass"""
         # Predict
@@ -80,6 +84,7 @@ def train_epoch(epoch, args, D, G, vgg_models, data_loader, D_optimizer, G_optim
         # D loss
         loss_d = -torch.mean(log(D_real) + log(1 - D_fake))
         loss_d.backward()
+        # torch.nn.utils.clip_grad_norm_(D.parameters(), -1, 1)
         D_optimizer.step()
         reset_grad()
 
@@ -96,11 +101,11 @@ def train_epoch(epoch, args, D, G, vgg_models, data_loader, D_optimizer, G_optim
         fake_offset = cam_fake[:, 1:, :6] - cam_fake[:, :-1, :6]
         real_offset = cam_real[:, 1:, :6] - cam_real[:, :-1, :6]
 
-        loss_aes = cal_aes_loss(x=cam_fake[:, :, 6], y=aes_score_real)
+        # loss_aes = cal_aes_loss(x=cam_fake[:, :, 6], y=aes_score_real)
         loss_direct = cal_direct_loss(x=fake_offset, y=real_offset)
         loss_mse = cal_general_mse_loss(x=cam_fake[:, :, :6], y=cam_real[:, :, :6])
 
-        loss_general = loss_aes + loss_direct + loss_mse
+        loss_general = loss_direct + loss_mse # + loss_aes
 
         # Feature Loss
         loss_feat = vggfeature_loss(cam_fake, cam_real, vgg_models)
@@ -111,6 +116,7 @@ def train_epoch(epoch, args, D, G, vgg_models, data_loader, D_optimizer, G_optim
                         args.lamb[2] * loss_gan
 
         loss_combined.backward()
+        # torch.nn.utils.clip_grad_norm_(G.parameters(), -1, 1)
         G_optimizer.step()
         reset_grad()
 
@@ -209,7 +215,7 @@ def train_gan_loss(G, D, train_data, train_labels, args):
         for logger in args.loggers:
             logger(string_epoch)
 
-        if args.path_save is not None:
+        if args.path_save is not None and epoch % 50 ==0:
             D.save(join(args.path_save, 'w_d.' + str(epoch) + '.pt'))
             G.save(join(args.path_save, 'w_g.' + str(epoch) + '.pt'))
 

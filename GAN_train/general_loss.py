@@ -123,7 +123,7 @@ def CharbTV(x):
 def create_vgg_model(end_layers=[8, 15], path=None, gpu=False):
     vgg16 = models.vgg16(pretrained=False)
 
-    vgg16.load_state_dict(torch.load("pre_train_models/vgg16-397923af.pth"))
+    vgg16.load_state_dict(torch.load("GAN_train/pre_train_models/vgg16-397923af.pth"))
 
     vgg16 = vgg16.features
 

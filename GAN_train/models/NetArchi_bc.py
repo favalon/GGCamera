@@ -122,8 +122,8 @@ class TrajDecoder(BaseModel):
         self.fc = nn.Linear(64, incamfeat + 1)
 
     def forward(self, action, act_v, salmask, salfeat, inipos, initheta, emoint, inicam):
-        # action(B,N,6,30), salfeat(B,N,6,64),
-        # inipos(B, N, 2, 3) initheta(B, N, 1) emoint(B,N,1),inicam(B,N,6)
+        # action(B,N,6,35), salfeat(B,N,6,64),
+        # inipos(B, N, 2, 3) initheta(B, N, 1) emoint(B,N,1), inicam(B,N,6)
 
         action = self.actionbranch1(action)
         act_v = self.actmove(act_v)
@@ -144,7 +144,7 @@ class TrajDecoder(BaseModel):
         ini_set = self.maxpool(ini_set)
         action = torch.cat((action, ini_set), dim=2)  # [B, N, 256]
 
-        inipos = inipos.reshape((inipos.shape[0], inipos.shape[1], inipos.shape[2] * inipos.shape[3]))
+        # inipos = inipos.reshape((inipos.shape[0], inipos.shape[1], inipos.shape[2] * inipos.shape[3]))
         inipos = self.iniposbranch(inipos)  # [B, N, 256]
 
         # P + A

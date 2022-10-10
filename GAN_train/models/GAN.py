@@ -15,15 +15,15 @@ class Discriminator(BaseModel):
         super(Discriminator, self).__init__()
 
         self.feat_branch = nn.Sequential(
-            nn.Linear(315, 256),
+            nn.Linear(700, 256),
             nn.LayerNorm(256),
-            nn.LeakyReLU(0.2, inplace=True),
+            nn.LeakyReLU(0.5, inplace=True),
             nn.Linear(256, 128),
             nn.LayerNorm(128),
-            nn.LeakyReLU(0.2, inplace=True),
+            nn.LeakyReLU(0.5, inplace=True),
             nn.Linear(128, 64),
             nn.LayerNorm(64),
-            nn.LeakyReLU(0.2, inplace=True),
+            nn.LeakyReLU(0.5, inplace=True),
             nn.Linear(64, 1),
         )
 
