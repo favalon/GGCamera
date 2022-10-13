@@ -72,21 +72,37 @@ def process_evaluation(generator, data1, data2, bs=10):
     return cam_seq.cpu().detach().numpy(), cam_real
 
 
-def reformat_output(cam_seq, offset=123):
+def smooth(y, box_pts):
+    box = np.ones(box_pts) / box_pts
+    y_smooth = np.convolve(y, box, mode='same')
+    return y_smooth
+
+
+def smooth_the_movement(cam_seq):
+    cam_seq[:, 0] = smooth(cam_seq[:, 0], 15)
+    cam_seq[:, 1] = smooth(cam_seq[:, 1], 15)
+    cam_seq[:, 2] = smooth(cam_seq[:, 2], 15)
+    return cam_seq
+
+
+def reformat_output(cam_seq, offset=123, smooth=True):
+    if smooth:
+        cam_seq = smooth_the_movement(cam_seq)
+
     reformat_seq = []
     for frame in range(cam_seq.shape[0]):
         line = {
             "Frame": frame + offset,
             "FocusedName": "Flynn Rider",
             "LocalPosition": {
-                "x": float(cam_seq[frame, 0]),
-                "y": float(cam_seq[frame, 1]),
-                "z": float(cam_seq[frame, 2])
+                "x": round(float(cam_seq[frame, 0]), 3),
+                "y": round(float(cam_seq[frame, 1]), 3),
+                "z": round(float(cam_seq[frame, 2]), 3)
             },
             "LocalRotation": {
-                "x": float(cam_seq[frame, 3]),
-                "y": float(cam_seq[frame, 4]),
-                "z": float(cam_seq[frame, 5])
+                "x": round(float(cam_seq[frame, 3]), 2) if abs(float(cam_seq[frame, 3])) > 1 else 0,
+                "y": round(float(cam_seq[frame, 4]), 2) if abs(float(cam_seq[frame, 4])) > 1 else 0,
+                "z": round(float(cam_seq[frame, 5]), 2) if abs(float(cam_seq[frame, 5])) > 1 else 0
             },
             "ModelWorldPosition": {
                 "x": 0,
@@ -118,10 +134,10 @@ def main(path):
     can_seq, real_seq = process_evaluation(G, test_data, test_label)
 
     # 4. output value
-    cam_seq = reformat_output(can_seq[0, :, :6])
+    cam_seq = reformat_output(can_seq[0, :, :6], smooth=True)
     SaveBasic.save_json(data=cam_seq, path=os.path.join(path, 'camera_output'),
                         fn="camera_seq_test.json")
-    real_seq = reformat_output(real_seq[0, :, :6])
+    real_seq = reformat_output(real_seq[0, :, :6], smooth=False)
     SaveBasic.save_json(data=real_seq, path=os.path.join(path, 'camera_output'),
                         fn="camera_seq_test_real.json")
 
