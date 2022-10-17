@@ -89,11 +89,12 @@ class AnimatedScatter(object):
     """An animated scatter plot using matplotlib.animations.FuncAnimation."""
 
     def __init__(self, path='local_data/skeleton', fn='test_data.json', target_fn='test_data.json',
-                 intensity=0.2, is_moving=False, play_animation=True):
+                 intensity=0.2, is_moving=False, play_animation=True, action_correction=False):
         self.path = path
         self.fn = fn
         self.stream = self.data_stream()
         self.intensity = intensity
+        self.action_correction = action_correction
         # for test roration
         self.frames = 10
         self.focus_points, self.focus_frames, self.focus_speed, self.focus_seq, self.focus_side, \
@@ -129,10 +130,11 @@ class AnimatedScatter(object):
             # Then setup FuncAnimation.
             self.ani = animation.FuncAnimation(self.fig, self.update, interval=40, init_func=self.setup_plot,
                                                blit=False)
+            plt.show()
         else:
             self.fig = plt.figure(figsize=(8, 8))
             self.ax = self.fig.add_subplot(111, projection='3d')
-            self.setup_plot(animation=False)
+            self.setup_plot(animation=True)
             plt.close(self.fig)
 
     def calculate_scale_ratio(self):
@@ -283,7 +285,7 @@ class AnimatedScatter(object):
                                             self.focus_points, self.focus_frames, self.focus_speed, self.focus_seq,
                                             sample=self.frames, rotates=np.eye(3),
                                             dist_offset=self.base2target_dist, scales=scales,
-                                            speed=self.speed_average, action_consis=True)
+                                            speed=self.speed_average, action_consis=False)
 
         direct_vectors, angles, focus = camera_line_simulation(event_1['position'], event_2['position'],
                                                                event_1['position'], event_2['position'],
@@ -291,7 +293,8 @@ class AnimatedScatter(object):
                                                                theta_start=projection_test_theta[0],
                                                                theta_end=projection_test_theta[1],
                                                                given_focus=self.focus_seq[:, 0, :],
-                                                               theta_ratio=0.8, intensity=self.intensity)
+                                                               theta_ratio=0.8, intensity=self.intensity,
+                                                               action_correction=self.action_correction)
 
         # direct_vectors, angles, focus = camera_line_simulation(event_1['position'], event_2['position'],
         #                                                        event_1['position'], event_2['position'],
@@ -483,6 +486,7 @@ def generate_all_camera_tracks(path):
     action_raw = os.listdir(os.path.join(path, "action_raw"))
 
     for action in action_raw:
+
         action_raw_src = os.path.join(path, "action_raw", action)
         action_raw_dst = 'local_data/skeleton/actor_data.json'
         shutil.copyfile(action_raw_src, action_raw_dst)
@@ -511,16 +515,39 @@ def generate_all_camera_tracks(path):
     return
 
 
+def single_action_camera_tracks(path, action=None):
+
+    action_raw_src = os.path.join(path, "action_raw", action)
+    action_raw_dst = 'local_data/skeleton/actor_data.json'
+    shutil.copyfile(action_raw_src, action_raw_dst)
+    output_path = os.path.join(path, "action2camera_tracks", action.split('.')[0])
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+
+    for intensity in [1]:
+        for obj_dist in [2]:
+            try:
+                print("processing intensity{} distance{}".format(str(intensity), str(obj_dist)))
+                a = AnimatedScatter(path='local_data/skeleton', fn='actor_data.json',
+                                    target_fn='dis_{}.json'.format(obj_dist), intensity=intensity,
+                                    play_animation=True, action_correction=False)
+                camera_track_src = os.path.join('local_data/skeleton/camera_output',
+                                                "camera_{}_int_{}.json".format(math.ceil(obj_dist), intensity))
+
+                camera_track_dst = os.path.join(output_path,
+                                                "camera_{}_int_{}.json".format(math.ceil(obj_dist), intensity))
+
+                # shutil.copyfile(camera_track_src, camera_track_dst)
+            except:
+
+                pass
+    return
+
+
 if __name__ == '__main__':
-    data_root = "../GGCamera_data/"
+    data_root = "GGCamera_data/"
 
     # generate_all_camera_tracks(data_root)
 
-    for intensity in [1, 0.6, 0.2]:
-        for obj_dist in [2, 4, 8]:
-            print("processing intensity{} distance{}".format(str(intensity), str(obj_dist)))
-            a = AnimatedScatter(path='local_data/skeleton', fn='actor_data.json',
-                                target_fn='dis_{}.json'.format(obj_dist), intensity=intensity)
-            plt.show()
-
+    single_action_camera_tracks(data_root, action="kneel_front_prostrate_1.json")
     # decompose_action()

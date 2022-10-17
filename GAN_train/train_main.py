@@ -161,8 +161,8 @@ if __name__ == '__main__':
     G = Generator(batch_size, in_shape, out_shape)
     D = Discriminator()
 
-    G.load(os.path.join(path_save, "w_g.900.pt"))
-    D.load(os.path.join(path_save, "w_d.900.pt"))
+    G.load(os.path.join(path_save, "w_g.1000.pt"))
+    D.load(os.path.join(path_save, "w_d.1000.pt"))
 
     lamb_char = 10
     lamb_gan = 0.3

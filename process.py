@@ -163,9 +163,15 @@ def calculate_point_projection(R, r, thetas, phis, focus_points, focus_frames, f
         diff = point - focus
         # point2focus_dist = np.linalg.norm(point - focus)
         if is_moving:
-            point = focus + diff * dist_adj_ratio
+            if action_consis:
+                point = diff * dist_adj_ratio
+            else:
+                point = diff
         else:
-            point = focus + diff * dist_adj_ratio
+            if action_consis:
+                point = focus + diff * dist_adj_ratio
+            else:
+                point = focus + diff
             # point2focus_dist_adj = np.linalg.norm(point - focus)
         points.append(point)
 
@@ -173,7 +179,7 @@ def calculate_point_projection(R, r, thetas, phis, focus_points, focus_frames, f
 
 
 def camera_line_simulation(e1_pos_env, e2_pos_env, e1_pos_unit, e2_pos_unit, camera_poss, theta_start=-120,
-                           theta_end=120, sample=49, given_focus=None, theta_ratio=1, intensity=0):
+                           theta_end=120, sample=49, given_focus=None, theta_ratio=1, intensity=0, action_correction=True):
     # calculate the rotation any scale use to rotation unit event line to env event line
     eline_env, scale_env = line_vector(e1_pos_env, e2_pos_env)
     eline_unit, scale_unit = line_vector(e1_pos_unit, e2_pos_unit)
@@ -189,9 +195,14 @@ def camera_line_simulation(e1_pos_env, e2_pos_env, e1_pos_unit, e2_pos_unit, cam
 
     if given_focus is not None:
         focus = np.zeros((given_focus.shape))
-        focus[:, 0] = given_focus[:, 0] + focus_center_x[:]  # * theta_ratio
-        focus[:, 1] = given_focus[:, 1] + focus_center_y[:]  # * theta_ratio
-        focus[:, 2] = given_focus[:, 2]  # + focus_center_x[:]
+        if not action_correction:
+            focus[:, 0] = focus_center_x[:]  # * theta_ratio
+            focus[:, 1] = focus_center_y[:]  # * theta_ratio
+            focus[:, 2] = focus_center_z[:]
+        else:
+            focus[:, 0] = given_focus[:, 0] + focus_center_x[:]  # * theta_ratio
+            focus[:, 1] = given_focus[:, 1] + focus_center_y[:]  # * theta_ratio
+            focus[:, 2] = given_focus[:, 2]  # + focus_center_x[:]
         focus = focus.tolist()
 
     else:

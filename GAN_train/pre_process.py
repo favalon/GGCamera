@@ -9,7 +9,7 @@ import numpy as np
 import torch
 
 from Const import norm_M1, rand5 as rands1
-from general.save_load import LoadBasic
+from general.save_load import LoadBasic, SaveBasic
 
 body_masks_valid = np.array(
     [[1, 1, 1, 1, 0], [1, 1, 1, 1, 1], [1, 1, 1, 1, 0], [1, 1, 1, 1, 0], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]]).reshape(
@@ -340,6 +340,7 @@ if __name__ == '__main__':
     dis_diff_contain = np.zeros((all_files_len, 100, 1))
     position_contain = np.zeros((all_files_len, 100, 2, 3))
     camera_data_contain = np.zeros((all_files_len, 100, 2, 3))
+    index2name = {}
 
     i = 0
 
@@ -370,9 +371,13 @@ if __name__ == '__main__':
             position_contain[i] = position
             camera_data_contain[i] = camera_data
 
+            name = camera_file.split("\\")[-2].split("/")[-1] + "_" + camera_file.split("\\")[-1].split(".json")[0]
+            index2name[i] = name
+
             i += 1
             print(i)
 
+    SaveBasic.save_json(index2name, os.path.join(data_root, "processed_np"), "index2name.json")
     act_info_base_contain = normalization_data(act_info_base_contain)
     act_info_diff_contain = normalization_data(act_info_diff_contain)
     act_info_v_contain = normalization_data(act_info_v_contain)
