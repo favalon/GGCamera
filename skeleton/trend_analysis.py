@@ -97,8 +97,12 @@ def plot_graph(points_speed, axis=None, act_name='', only_peak=True, show_plot=T
 
     plt.suptitle('{} Change Curve'.format(act_name), fontsize=20)
 
-    plt.show()
-    return
+    if show_plot:
+        plt.show()
+    else:
+        plt.clf()
+        plt.close()
+    return point_speed
 
 
 def get_single_acceleration(skeleton_sequence, names=None, axis='x', act_name='', plot=False):
@@ -154,7 +158,7 @@ def get_single_acceleration(skeleton_sequence, names=None, axis='x', act_name=''
     return points_speed, point_name, points_imp
 
 
-def get_accelerations(skeleton_sequence, point_names, act_name='', mix_only="y"):
+def get_accelerations(skeleton_sequence, point_names, act_name='', mix_only="y", plot=False):
     diff_x = max(skeleton_sequence[0, 0, :, 0]) - min(skeleton_sequence[0, 0, :, 0])
     diff_y = max(skeleton_sequence[0, 0, :, 2]) - min(skeleton_sequence[0, 0, :, 2])
     diff_z = max(skeleton_sequence[0, 0, :, 1]) - min(skeleton_sequence[0, 0, :, 1])
@@ -163,29 +167,30 @@ def get_accelerations(skeleton_sequence, point_names, act_name='', mix_only="y")
 
     if mix_only == 'mix':
         mix_speed, point_name, points_imp = get_single_acceleration(skeleton_sequence[:, 0, :, :], names=point_names,
-                                                                    axis='mix', act_name=act_name)
+                                                                    axis='mix', act_name=act_name, plot=plot)
         return mix_speed, point_name, points_imp, max_diff
     else:
         if mix_only == 'x':
             x_speed, point_name, points_imp = get_single_acceleration(skeleton_sequence[:, 0, :, 0], names=point_names,
-                                                                      axis='x', act_name=act_name)
+                                                                      axis='x', act_name=act_name, plot=plot)
             return x_speed, point_name, points_imp, max_diff
         if mix_only == 'y':
             y_speed, point_name, points_imp = get_single_acceleration(skeleton_sequence[:, 0, :, 2], names=point_names,
-                                                                      axis='y', act_name=act_name)
+                                                                      axis='y', act_name=act_name, plot=plot)
 
             return y_speed, point_name, points_imp, max_diff
         if mix_only == 'z':
             z_speed, point_name, points_imp = get_single_acceleration(skeleton_sequence[:, 0, :, 1], names=point_names,
-                                                                      axis='z', act_name=act_name)
+                                                                      axis='z', act_name=act_name, plot=plot)
             return z_speed, point_name, points_imp, max_diff
 
 
-def process_action(skeleton_sequence, action_name=''):
+def process_action(skeleton_sequence, action_name='', plot=False, mix_only="y"):
     skeleton_sequence, point_names = get_skeleton_array(skeleton_sequence)
 
     mix_speed, point_name, points_imp, max_diff = get_accelerations(skeleton_sequence, point_names,
-                                                                    act_name=action_name)
+                                                                    act_name=action_name, plot=plot,
+                                                                    mix_only="y")
 
     return mix_speed, point_name, points_imp, max_diff
 
@@ -197,7 +202,7 @@ def decompose_action(path='local_data/skeleton', fn='action_standard_set1.json')
         action_name = action['ActionName']
         actions_seq = action['ActionData']
 
-        process_action(actions_seq, action_name=action_name)
+        process_action(actions_seq, action_name=action_name, plot=True)
 
 
 def split_store_action(path='local_data/skeleton', fn='action_standard_set1.json'):
@@ -224,5 +229,5 @@ def get_focus_max_change(focus_seq):
 
 
 if __name__ == '__main__':
-    split_store_action(path='local_data/skeleton', fn='action_standard_set1.json')
-    # decompose_action()
+    # split_store_action(path='local_data/skeleton', fn='action_standard_set1.json')
+    decompose_action()

@@ -524,7 +524,7 @@ def single_action_camera_tracks(path, action=None):
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
-    for intensity in [1]:
+    for intensity in [0.2, 0.4, 0.6, 0.8, 1]:
         for obj_dist in [2]:
             try:
                 print("processing intensity{} distance{}".format(str(intensity), str(obj_dist)))
@@ -534,8 +534,8 @@ def single_action_camera_tracks(path, action=None):
                 camera_track_src = os.path.join('local_data/skeleton/camera_output',
                                                 "camera_{}_int_{}.json".format(math.ceil(obj_dist), intensity))
 
-                camera_track_dst = os.path.join(output_path,
-                                                "camera_{}_int_{}.json".format(math.ceil(obj_dist), intensity))
+                # camera_track_dst = os.path.join(output_path,
+                #                                 "camera_{}_int_{}.json".format(math.ceil(obj_dist), intensity))
 
                 # shutil.copyfile(camera_track_src, camera_track_dst)
             except:
