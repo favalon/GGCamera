@@ -220,7 +220,7 @@ class AnimatedScatter(object):
     def update(self, i):
         """Update the scatter plot."""
         data, point, focus, rotate = next(self.stream)
-        camera_shooting = np.array([point])
+        camera_shooting = np.array([point]) # + np.array([focus])
 
         data = np.concatenate((data, camera_shooting), axis=0)
 
@@ -285,7 +285,7 @@ class AnimatedScatter(object):
                                             self.focus_points, self.focus_frames, self.focus_speed, self.focus_seq,
                                             sample=self.frames, rotates=np.eye(3),
                                             dist_offset=self.base2target_dist, scales=scales,
-                                            speed=self.speed_average, action_consis=False)
+                                            speed=self.speed_average, action_consis=True)
 
         direct_vectors, angles, focus = camera_line_simulation(event_1['position'], event_2['position'],
                                                                event_1['position'], event_2['position'],
@@ -524,8 +524,8 @@ def single_action_camera_tracks(path, action=None):
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
-    for intensity in [0.2, 0.4, 0.6, 0.8, 1]:
-        for obj_dist in [2]:
+    for intensity in [1, 0.8, 0.6, 0.4, 0.2]:
+        for obj_dist in [4]:
             try:
                 print("processing intensity{} distance{}".format(str(intensity), str(obj_dist)))
                 a = AnimatedScatter(path='local_data/skeleton', fn='actor_data.json',

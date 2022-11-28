@@ -89,7 +89,7 @@ def plt_torus(ax, torus, event_1=None, event_2=None, points=None, cameras=None, 
             if i % 10 == 0:
                 ax1.scatter(point[0], point[1], point[2], marker='o', c='g', s=30)
 
-    points = np.array(points)  # focus
+    points = np.array(points) + np.array(focus)  # focus
 
     ax1.plot(points[:, 0], points[:, 1], points[:, 2], '.r-', linewidth=2)
 

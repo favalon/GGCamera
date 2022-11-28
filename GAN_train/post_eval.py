@@ -7,7 +7,7 @@ from general.save_load import SaveBasic
 from models.NetArchi_bc import Generator
 
 
-def load_single_test(path, single_i=275):
+def load_single_test(path, single_i=100):
     with open(os.path.join(path, 'act_info_base_contain.npy'), 'rb') as f:
         act_info_base_contain = np.load(f)
     with open(os.path.join(path, 'act_info_diff_contain.npy'), 'rb') as f:
@@ -123,7 +123,7 @@ def reformat_output(cam_seq, offset=123, smooth=True):
 
 def main(path):
     # 1. load test data
-    test_data, test_label = load_single_test(os.path.join(path, "processed_np"))
+    test_data, test_label = load_single_test(os.path.join(path, "processed_np"), single_i=274)
 
     # 2. load Generator model
     model_path = os.path.join(path, "checkpointGAN", "w_g.1000.pt")

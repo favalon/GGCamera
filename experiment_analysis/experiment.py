@@ -1,12 +1,15 @@
 import math
 import os
+
 import matplotlib.pyplot as plt
 import numpy as np
-from skeleton.trend_analysis import process_action, plot_graph
-from general.save_load import LoadBasic
-from scipy.signal import savgol_filter
 import scipy.spatial.distance as ssd
 import scipy.stats as ss
+from scipy.signal import savgol_filter
+
+from general.save_load import LoadBasic
+from skeleton.trend_analysis import process_action, plot_graph
+
 
 def reformat_seq(cam_seq):
     cam_seq_format = np.zeros((len(cam_seq), 2, 3))
@@ -90,7 +93,6 @@ def exp1_seq_dis_diff(generate_seq, real_seq, relate_seq):
 
 
 def exp2_curve_compare_plot(grad_generate_seq, real_generate_seq, relate_generate_seq, point_speed, axis=""):
-
     smooth_window = 15
 
     # smooth the line
@@ -121,7 +123,6 @@ def exp2_curve_compare_plot(grad_generate_seq, real_generate_seq, relate_generat
     ax2.legend(loc='upper center')
     plt.show()
 
-
     print(f'Similarity: Real Vs Skeleton Action ({axis} axis)')
     print(f'correlation distance {ssd.correlation(real_generate_seq, point_speed)}')
     # print(np.correlate(real_generate_seq, abs(point_speed), mode='valid'))
@@ -144,7 +145,6 @@ def exp2_curve_compare_plot(grad_generate_seq, real_generate_seq, relate_generat
 
 
 def exp2_seq_dis_diff(generate_seq, real_seq, relate_seq, actions_seq, axis="x", max_frame=100):
-
     axis2index = {"x": 0, "y": 1, "z": 2}
 
     # get seq
@@ -158,7 +158,8 @@ def exp2_seq_dis_diff(generate_seq, real_seq, relate_seq, actions_seq, axis="x",
     real_generate_seq = np.gradient(real_select_seq)
     relate_generate_seq = np.gradient(relate_select_seq)
 
-    speed, name, imp, diff = process_action(actions_seq, action_name="kneel_front_prostrate_1", plot=False, mix_only=axis)
+    speed, name, imp, diff = process_action(actions_seq, action_name="kneel_front_prostrate_1", plot=False,
+                                            mix_only=axis)
     point_speed = plot_graph(speed, axis=axis, act_name="kneel_front_prostrate_1", only_peak=True, show_plot=False)
 
     exp2_curve_compare_plot(grad_generate_seq, real_generate_seq, relate_generate_seq,
@@ -170,11 +171,10 @@ def exp2_seq_dis_diff(generate_seq, real_seq, relate_seq, actions_seq, axis="x",
 def exp3_curve_compare_plot(generate_seq_02, generate_seq_04, generate_seq_06,
                             generate_seq_08, generate_seq_1,
                             real_generate_seq, relate_generate_seq, point_speed, axis=""):
-
-    smooth_window = 15
+    smooth_window = 5
 
     # smooth the line
-    noise = np.random.normal(point_speed, 1) * 0.0001
+    noise = np.random.normal(point_speed, 1) * 0.00001
     generate_seq_02 = savgol_filter(generate_seq_02 + noise, smooth_window, 3)
     generate_seq_04 = savgol_filter(generate_seq_04 + noise, smooth_window, 3)
     generate_seq_06 = savgol_filter(generate_seq_06 + noise, smooth_window, 3)
@@ -185,39 +185,49 @@ def exp3_curve_compare_plot(generate_seq_02, generate_seq_04, generate_seq_06,
     relate_generate_seq = savgol_filter(relate_generate_seq + noise, smooth_window, 3)
     point_speed = savgol_filter(point_speed + noise, smooth_window, 3)
 
-    point_speed = -point_speed
+    point_speed = abs(point_speed)
 
     fig, ax1 = plt.subplots()
     ax2 = ax1.twinx()
 
-    ax2.plot([i for i in range(point_speed.shape[0])], point_speed, label="action")
-    ax1.plot([i for i in range(point_speed.shape[0])], generate_seq_02, marker="v", c="r", label="0.2")
-    ax1.plot([i for i in range(point_speed.shape[0])], generate_seq_04, marker="v", c="r", label="0.4")
-    ax1.plot([i for i in range(point_speed.shape[0])], generate_seq_06, marker="v", c="r", label="0.6")
-    ax1.plot([i for i in range(point_speed.shape[0])], generate_seq_08, marker="v", c="r", label="0.8")
-    ax1.plot([i for i in range(point_speed.shape[0])], generate_seq_1, marker="v", c="r", label="1")
+    ax2.plot([i for i in range(point_speed.shape[0])], point_speed, label="action", linewidth=3)
+    ax1.plot([i for i in range(point_speed.shape[0])], generate_seq_02, marker="o", c="c", label="0.2")
+    # ax1.plot([i for i in range(point_speed.shape[0])], real_generate_seq, marker="v", c="m", label="0.4")
+    ax1.plot([i for i in range(point_speed.shape[0])], generate_seq_06, marker="^", c="y", label="0.6")
+    ax1.plot([i for i in range(point_speed.shape[0])], generate_seq_1, marker="x", c="g", label="1")
+    ax1.plot([i for i in range(point_speed.shape[0])], abs(real_generate_seq), marker="v", c="m", label="real")
+    ax1.plot([i for i in range(point_speed.shape[0])], relate_generate_seq, marker="<", c="k", label="relate")
 
-    ax1.plot([i for i in range(point_speed.shape[0])], real_generate_seq, marker="o", c="g", label="real")
-    ax1.plot([i for i in range(point_speed.shape[0])], relate_generate_seq, marker="1", c="y", label="relate")
+    # ax1.plot([i for i in range(point_speed.shape[0])], real_generate_seq, marker="o", c="g", label="real")
+    # ax1.plot([i for i in range(point_speed.shape[0])], relate_generate_seq, marker="1", c="y", label="relate")
 
     ax1.legend()
-    # ax2.legend(loc='upper center')
+    ax2.legend(loc='upper left')
+
+    plt.title(f'Action Vs Camera Movement With Different Emotion Intensity({axis} axis)')
+    plt.xlabel("frames")
+    ax1.set_ylabel('distance change per frame (camera)', color='black')
+    ax2.set_ylabel('distance change per frame (action)', color='black')
     plt.show()
     return 0
 
 
 def exp3_emotional_action(path, generate_seq, real_seq, relate_seq, actions_seq, axis="x", max_frame=80):
     generate_seq_02 = reformat_seq(
-        LoadBasic.load_basic("camera_2_int_0.2.json", path=os.path.join(path, "intentsity"), file_type="json")['data'])[10:max_frame, :, :]
+        LoadBasic.load_basic("camera_4_int_0.2.json", path=os.path.join(path, "intentsity"), file_type="json")['data'])[
+                      10:max_frame, :, :]
     generate_seq_04 = reformat_seq(
-        LoadBasic.load_basic("camera_2_int_0.4.json", path=os.path.join(path, "intentsity"), file_type="json")['data'])[10:max_frame, :, :]
+        LoadBasic.load_basic("camera_4_int_0.4.json", path=os.path.join(path, "intentsity"), file_type="json")['data'])[
+                      10:max_frame, :, :]
     generate_seq_06 = reformat_seq(
-        LoadBasic.load_basic("camera_2_int_0.6.json", path=os.path.join(path, "intentsity"), file_type="json")['data'])[10:max_frame, :, :]
+        LoadBasic.load_basic("camera_4_int_0.6.json", path=os.path.join(path, "intentsity"), file_type="json")['data'])[
+                      10:max_frame, :, :]
     generate_seq_08 = reformat_seq(
-        LoadBasic.load_basic("camera_2_int_0.8.json", path=os.path.join(path, "intentsity"), file_type="json")['data'])[10:max_frame, :, :]
+        LoadBasic.load_basic("camera_4_int_0.8.json", path=os.path.join(path, "intentsity"), file_type="json")['data'])[
+                      10:max_frame, :, :]
     generate_seq_1 = reformat_seq(
-        LoadBasic.load_basic("camera_2_int_1.json", path=os.path.join(path, "intentsity"), file_type="json")['data'])[10:max_frame, :, :]
-
+        LoadBasic.load_basic("camera_4_int_1.json", path=os.path.join(path, "intentsity"), file_type="json")['data'])[
+                     10:max_frame, :, :]
 
     axis2index = {"x": 0, "y": 1, "z": 2}
 
@@ -230,10 +240,18 @@ def exp3_emotional_action(path, generate_seq, real_seq, relate_seq, actions_seq,
     real_select_seq = real_seq[:, 0, axis2index[axis]]
     relate_select_seq = relate_seq[:, 0, axis2index[axis]]
 
+    # get gradient
+    generate_seq_02 = np.gradient(generate_seq_02)
+    generate_seq_04 = np.gradient(generate_seq_04)
+    generate_seq_06 = np.gradient(generate_seq_06)
+    generate_seq_08 = np.gradient(generate_seq_08)
+    generate_seq_1 = np.gradient(generate_seq_1)
+    real_generate_seq = np.gradient(real_select_seq)
+    relate_generate_seq = np.gradient(relate_select_seq)
+
     speed, name, imp, diff = process_action(actions_seq, action_name="kneel_front_prostrate_1", plot=False,
                                             mix_only=axis)
     point_speed = plot_graph(speed, axis=axis, act_name="kneel_front_prostrate_1", only_peak=True, show_plot=False)
-
 
     exp3_curve_compare_plot(generate_seq_02, generate_seq_04, generate_seq_06,
                             generate_seq_08, generate_seq_1,
@@ -257,6 +275,7 @@ def main(path, max_frame=90):
                           real_seq[10:max_frame, :, :],
                           relate_seq[10:max_frame, :, :],
                           action_seq, axis="z", max_frame=max_frame)
+
 
 if __name__ == '__main__':
     data_path = "GGCamera_data/camera_output"
